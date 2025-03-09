@@ -1,0 +1,2 @@
+
+void storageProxy_test();
