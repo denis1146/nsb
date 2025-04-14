@@ -1,16 +1,9 @@
 project(libs VERSION 0.1)
-#add_library(foo INTERFACE)
-#set(with_variadics ${CMAKE_CURRENT_SOURCE_DIR}/with_variadics)
-#set(no_variadics ${CMAKE_CURRENT_SOURCE_DIR}/no_variadics)
-#target_include_directories(foo
-#  INTERFACE
-#    "$<$<COMPILE_FEATURES:cxx_variadic_templates>:${with_variadics}>"
-#    "$<$<NOT:$<COMPILE_FEATURES:cxx_variadic_templates>>:${no_variadics}>"
-#  )
 
 add_library(libs STATIC
   NsbVector/NsbVector.h
   NsbVector/NsbVector.cpp
+  utility.h
 )
 target_link_libraries(libs
 PRIVATE
@@ -18,8 +11,18 @@ PRIVATE
   nsb_compile_options
 )
 
-add_executable(libs_tests main.cpp)
-target_link_libraries(libs_tests
+add_executable(libs_testing
+"libs_testing/main.cpp"
+"libs_testing/utility_test.h"
+)
+target_include_directories(libs_testing
 PRIVATE
+  "./"
+)
+target_link_libraries(libs_testing
+PRIVATE
+  nsb_standard_flags
+  nsb_compile_options
   libs
+  gtest
 )

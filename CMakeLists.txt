@@ -16,7 +16,7 @@ target_compile_options(nsb_compile_options INTERFACE
 ]]
 target_compile_options(nsb_compile_options INTERFACE
 #"$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
-"$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Werror;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
+"$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Werror;-Wpedantic;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
 "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
 )
 
@@ -30,6 +30,9 @@ add_subdirectory(app)
 add_subdirectory(cpp_russia)
 add_subdirectory(effective_cpp)
 add_subdirectory(libs)
+
+# External libraries:
+add_subdirectory(ext_libs/googletest)
 
 #[[
 message(STATUS "=== Print system information:")
