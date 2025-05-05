@@ -1,8 +1,16 @@
 {
   "debug.showBreakpointsInOverviewRuler": true,
-  "debug.showVariableTypes": true,
+  // "debug.showVariableTypes": true,
   "editor.formatOnSave": false,
   "C_Cpp.formatting": "clangFormat",
+  "C_Cpp.enhancedColorization": "enabled",
+  "editor.semanticTokenColorCustomizations": {
+    "rules": {
+        "parameter": {
+            "foreground": "#808080",
+        },
+    },
+  },
   "files.associations": {
     "cctype": "cpp",
     "clocale": "cpp",
@@ -73,6 +81,7 @@
     "fstream": "cpp",
     "iomanip": "cpp",
     "mutex": "cpp",
-    "span": "cpp"
+    "span": "cpp",
+    "charconv": "cpp"
   },
 }
