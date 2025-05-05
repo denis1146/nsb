@@ -17,7 +17,7 @@ PRIVATE
 add_executable(libs_testing
   "libs_testing/caches/caches_test.cpp"
   "libs_testing/main.cpp"
-  "libs_testing/utility_test.h"
+  "libs_testing/utility_test.cpp"
 )
 target_include_directories(libs_testing
 PRIVATE
