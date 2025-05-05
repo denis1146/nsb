@@ -14,6 +14,8 @@ template <class Key, class Value>
 class Lru
 {
 public:
+  using key_type = Key;
+  using value_type = Value;
   using AllCache = std::vector<std::pair<Key, Value>>;
   using SlowGetValue = std::function<Value(const Key&)>;
 

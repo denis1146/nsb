@@ -23,14 +23,25 @@ class CacheTest: public testing::Test
 {
 public:
   CacheTest()
-  : m_cache{ MAX_SIZE, [this] (size_t key) { return toString(key, m_ec); } }
+  : m_cache{ MAX_SIZE, [this] (const auto& key) {
+    if constexpr (std::is_same_v<typename Cache::value_type, size_t>) {
+      m_ec = ERR_NO;
+      return key;
+    }
+    else {
+      return toString(key, m_ec);
+    }
+  }}
   {}
 
   std::errc m_ec { ERR_NO };
   Cache m_cache;
 };
 
-using CacheTypes = ::testing::Types<nsb::caches::Lru<size_t, std::string>>;
+using CacheTypes = ::testing::Types<
+nsb::caches::Lru<size_t, std::string>
+, nsb::caches::Lru<size_t, size_t>
+>;
 TYPED_TEST_SUITE(CacheTest, CacheTypes);
 
 }
@@ -57,23 +68,28 @@ TYPED_TEST(CacheTest, get)
   const auto ec6 = ec;
 
   // Assert
-  ASSERT_STREQ(v1.c_str(), "1") << "++++++ CacheTest.get +++++++ ";
-  ASSERT_EQ(ec1, ERR_NO);
-
-  ASSERT_STREQ(v2.c_str(), "2");
-  ASSERT_EQ(ec2, ERR_NO);
-
-  ASSERT_STREQ(v3.c_str(), "3");
-  ASSERT_EQ(ec3, ERR_NO);
-
-  ASSERT_STREQ(v4.c_str(), "3");
-  ASSERT_EQ(ec4, ERR_NO);
-
-  ASSERT_STREQ(v5.c_str(), "5");
-  ASSERT_EQ(ec5, ERR_NO);
-
-  ASSERT_STREQ(v6.c_str(), "6");
-  ASSERT_EQ(ec6, ERR_NO);
+  if constexpr (std::is_same_v<decltype(cache.get(0)), std::string>) {
+    ASSERT_STREQ(v1.c_str(), "1") << "++++++ CacheTest.get [value = std::string] +++++++ ";
+    ASSERT_EQ(ec1, ERR_NO);
+    ASSERT_STREQ(v2.c_str(), "2");
+    ASSERT_EQ(ec2, ERR_NO);
+    ASSERT_STREQ(v3.c_str(), "3");
+    ASSERT_EQ(ec3, ERR_NO);
+    ASSERT_STREQ(v4.c_str(), "3");
+    ASSERT_EQ(ec4, ERR_NO);
+    ASSERT_STREQ(v5.c_str(), "5");
+    ASSERT_EQ(ec5, ERR_NO);
+    ASSERT_STREQ(v6.c_str(), "6");
+    ASSERT_EQ(ec6, ERR_NO);
+  }
+  else {
+    ASSERT_EQ(v1, 1) << "++++++ CacheTest.get [value = size_t] +++++++ ";
+    ASSERT_EQ(v2, 2);
+    ASSERT_EQ(v3, 3);
+    ASSERT_EQ(v4, 3);
+    ASSERT_EQ(v5, 5);
+    ASSERT_EQ(v6, 6);
+  }
 }
 
 TYPED_TEST(CacheTest, getFast)
