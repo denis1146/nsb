@@ -20,6 +20,12 @@ target_compile_options(nsb_compile_options INTERFACE
 "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
 )
 
+add_library(nsb_compile_options_for_dev INTERFACE)
+target_compile_options(nsb_compile_options_for_dev INTERFACE
+"$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wpedantic;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
+"$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
+)
+
 add_library(nsb_standard_flags INTERFACE)
 target_compile_features(nsb_standard_flags INTERFACE cxx_std_23)
 #set(CMAKE_CXX_STANDARD 20)
