@@ -39,8 +39,10 @@ public:
 };
 
 using CacheTypes = ::testing::Types<
-nsb::caches::Lru<size_t, std::string>
+  nsb::caches::Lru<size_t, std::string>
 , nsb::caches::Lru<size_t, size_t>
+, nsb::caches::Fifo<size_t, std::string>
+, nsb::caches::Fifo<size_t, size_t>
 >;
 TYPED_TEST_SUITE(CacheTest, CacheTypes);
 
@@ -113,13 +115,11 @@ TYPED_TEST(CacheTest, getAll)
 {
   // Arrange
   const auto& cache = this->m_cache;
-  constexpr size_t addSz = 2;
-  constexpr size_t sz = MAX_SIZE + addSz;
   std::array<size_t, MAX_SIZE> keys{};
 
   // Act
   const auto ga0 = cache.getAll();
-  for (size_t i = 0; i < sz; ++i) {
+  for (size_t i = 0; i < MAX_SIZE; ++i) {
     [[maybe_unused]] auto _ = cache.get(i);
   }
   const auto ga1 = cache.getAll();
@@ -131,7 +131,7 @@ TYPED_TEST(CacheTest, getAll)
   ASSERT_EQ(ga0.size(), 0);
   ASSERT_EQ(ga1.size(), MAX_SIZE);
   for (size_t i = 0; i < MAX_SIZE; ++i)
-    ASSERT_EQ(keys[i], i + addSz);
+    ASSERT_EQ(keys[i], i);
 }
 
 TYPED_TEST(CacheTest, have)

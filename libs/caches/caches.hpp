@@ -85,4 +85,86 @@ size_t Lru<Key, Value>::size() const
 
 // ~Lru
 
+// Fifo
+template <class Key, class Value>
+Fifo<Key, Value>::Fifo(size_t maxSize, SlowGetValue slowGetValue)
+: m_maxSize{ maxSize }
+, m_slowGetValue{ slowGetValue }
+{
+  assert(m_slowGetValue);
+}
+
+template <class Key, class Value>
+Value Fifo<Key, Value>::get(const Key& key) const
+{
+  if (auto val = getFast(key))
+    return *val;
+
+  if (size() == maxSize()) {
+    m_hash.erase(m_cache.front().first);
+    m_cache.pop_back();
+  }
+
+  m_cache.emplace_back(key, m_slowGetValue(key));
+  m_hash.emplace(key, --m_cache.end());
+  return m_cache.back().second;
+}
+
+template <class Key, class Value>
+std::optional<Value> Fifo<Key, Value>::getFast(const Key& key) const
+{
+  auto it = m_hash.find(key);
+  if (it != m_hash.end()) {
+    const ListIt& lstIt = it->second;
+    return { lstIt->second };
+  }
+  return std::nullopt;
+}
+
+template <class Key, class Value>
+typename Fifo<Key, Value>::AllCache Fifo<Key, Value>::getAll() const
+{
+  Fifo<Key, Value>::AllCache ret;
+  ret.reserve(size());
+  std::copy(m_cache.cbegin(), m_cache.cend(), std::back_inserter(ret));
+  return ret;
+}
+
+template <class Key, class Value>
+bool Fifo<Key, Value>::have(Key key) const
+{
+  return m_hash.contains(key);
+}
+
+template <class Key, class Value>
+void Fifo<Key, Value>::clear()
+{
+  m_cache.clear();
+  m_hash.clear();
+}
+
+template <class Key, class Value>
+void Fifo<Key, Value>::remove(const Key& key)
+{
+  auto it = m_hash.find(key);
+  if (it != m_hash.end()) {
+    m_cache.erase(it->second);
+    m_hash.erase(it);
+  }
+}
+
+template <class Key, class Value>
+size_t Fifo<Key, Value>::maxSize() const
+{
+  return m_maxSize;
+}
+
+template <class Key, class Value>
+size_t Fifo<Key, Value>::size() const
+{
+  return m_cache.size();
+}
+
+// ~Fifo
+
 } // ~nsb::caches
