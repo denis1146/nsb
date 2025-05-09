@@ -27,9 +27,10 @@ target_compile_features(nsb_standard_flags INTERFACE cxx_std_23)
 # set_property(TARGET app CXX_STANDARD 23)
 
 add_subdirectory(app)
-add_subdirectory(cpp_russia)
-add_subdirectory(effective_cpp)
 add_subdirectory(libs)
+
+# External exercises
+add_subdirectory(ext_exercises)
 
 # External libraries:
 add_subdirectory(ext_libs/googletest)
