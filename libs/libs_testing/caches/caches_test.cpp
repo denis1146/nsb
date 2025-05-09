@@ -138,27 +138,22 @@ TYPED_TEST(CacheTest, have)
 {
   // Arrange
   const auto& cache = this->m_cache;
-  constexpr size_t key0 = 0;
-  constexpr size_t key1 = 1;
-  constexpr size_t key2 = 10;
-  constexpr size_t key3 = 100;
+  std::array<bool, MAX_SIZE> hasValues{};
 
   // Act
-  [[maybe_unused]] auto i = cache.get(key0);
-  [[maybe_unused]] auto _1 = cache.get(key1);
-  [[maybe_unused]] auto _2 = cache.get(key2);
-  [[maybe_unused]] auto _3 = cache.get(key3);
+  for (size_t i = 0; i < MAX_SIZE; ++i)
+    [[maybe_unused]] auto _ = cache.get(i);
 
-  const auto h0 = cache.have(key0);
-  const auto h1 = cache.have(key1);
-  const auto h2 = cache.have(key2);
-  const auto h3 = cache.have(key3);
+  for (size_t i = 0; i < MAX_SIZE; ++i)
+    hasValues[i] = cache.have(i);
   
   // Assert
-  ASSERT_FALSE(h0);
-  ASSERT_TRUE(h1);
-  ASSERT_TRUE(h2);
-  ASSERT_TRUE(h3);
+  for (const auto& has_value : hasValues)
+    ASSERT_TRUE(has_value);
+
+  const auto dist = MAX_SIZE + 10;
+  for (size_t i = MAX_SIZE; i < dist; ++i)
+    ASSERT_FALSE(cache.have(i));
 }
 
 TYPED_TEST(CacheTest, clear)
