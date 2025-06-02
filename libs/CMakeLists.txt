@@ -5,6 +5,8 @@ add_library(libs STATIC
   caches/caches.hpp
   NsbVector/NsbVector.h
   NsbVector/NsbVector.cpp
+  numeric/reduce.h
+  numeric/reduce.hpp
   utility.h
 )
 target_link_libraries(libs
@@ -12,10 +14,12 @@ PRIVATE
   nsb_standard_flags
   nsb_compile_options
   # nsb_compile_options_for_dev
+  tbb
 )
 
 add_executable(libs_testing
   "libs_testing/caches/caches_test.cpp"
+  "libs_testing/numeric/reduce_test.cpp"
   "libs_testing/main.cpp"
   "libs_testing/utility_test.cpp"
 )

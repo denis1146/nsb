@@ -82,6 +82,13 @@
     "iomanip": "cpp",
     "mutex": "cpp",
     "span": "cpp",
-    "charconv": "cpp"
+    "charconv": "cpp",
+    "shared_mutex": "cpp",
+    "cfenv": "cpp",
+    "execution": "cpp",
+    "future": "cpp",
+    "barrier": "cpp",
+    "strstream": "cpp",
+    "valarray": "cpp"
   },
 }
