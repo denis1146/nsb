@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <type_traits>
+#include <array>
 
 #include "utility.h"
 
@@ -45,4 +46,15 @@ TEST(utility, toUType)
   
   ASSERT_TRUE(b5);
   ASSERT_EQ(e5, c5);
+}
+
+TEST(utility, iterator_traits_v)
+{
+  using int_t = nsb::iterator_traits_v<decltype(std::declval<std::array<int, 0>>().begin())>;
+  using double_t = nsb::iterator_traits_v<decltype(std::declval<std::vector<double>>().end())>;
+  using long_long_t = nsb::iterator_traits_v<decltype(std::declval<std::vector<long long>>().cend())>;
+
+  testing::StaticAssertTypeEq<int_t, int>();
+  testing::StaticAssertTypeEq<double_t, double>();
+  testing::StaticAssertTypeEq<long_long_t, long long>();
 }

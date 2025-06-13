@@ -17,6 +17,11 @@ PRIVATE
   tbb
 )
 
+target_include_directories(libs
+PRIVATE
+  "./"
+)
+
 add_executable(libs_testing
   "libs_testing/caches/caches_test.cpp"
   "libs_testing/numeric/reduce_test.cpp"

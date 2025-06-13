@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include <iterator>
 
 namespace nsb {
 
@@ -9,5 +10,8 @@ constexpr auto toUType (Enum value) noexcept
 {
   return static_cast<std::underlying_type_t<Enum>>(value);
 }
+
+template <class Iter>
+using iterator_traits_v = typename std::iterator_traits<Iter>::value_type;
 
 } // ~nsb

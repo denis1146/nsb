@@ -41,45 +41,44 @@ void for_range_blocks(ForwardIt first, ForwardIt last, std::function<void(Forwar
 } // ~details
 
 template <class ExecutionPolicy, class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(ExecutionPolicy&& policy, ForwardIt first, ForwardIt last)
 {
   return std::reduce(std::forward<ExecutionPolicy>(policy), first, last);
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::std_sequenced_accumulate_policy, ForwardIt first, ForwardIt last)
 {
-  using value_type = typename std::iterator_traits<ForwardIt>::value_type;
-  return std::accumulate(first, last, value_type{});
+  return std::accumulate(first, last, iterator_traits_v<ForwardIt>{});
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::std_sequenced_reduce_policy, ForwardIt first, ForwardIt last)
 {
   return std::reduce(first, last);
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::sequenced_policy, ForwardIt first, ForwardIt last)
 {
-  auto ret = typename std::iterator_traits<ForwardIt>::value_type {};
+  auto ret = iterator_traits_v<ForwardIt>{};
   for (; first != last; ++first)
     ret = std::move(ret) + *first;
   return ret;
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::parallel_thread_policy, ForwardIt first, ForwardIt last)
 {
   if (first == last)
     return {};
 
-  using ReturnType = typename std::iterator_traits<ForwardIt>::value_type;
+  using ReturnType = iterator_traits_v<ForwardIt>;
   const std::size_t length = std::distance(first, last);
   const std::size_t num_threads = details::getThreadCount(length);
   const std::size_t block_sz = length/num_threads;
@@ -106,13 +105,13 @@ reduce(execution::parallel_thread_policy, ForwardIt first, ForwardIt last)
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::parallel_jthread_policy, ForwardIt first, ForwardIt last)
 {
   if (first == last)
     return {};
 
-  using ReturnType = typename std::iterator_traits<ForwardIt>::value_type;
+  using ReturnType = iterator_traits_v<ForwardIt>;
   const std::size_t length = std::distance(first, last);
   const std::size_t num_threads = details::getThreadCount(length);
   const std::size_t block_sz = length/num_threads;
@@ -140,13 +139,13 @@ reduce(execution::parallel_jthread_policy, ForwardIt first, ForwardIt last)
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::parallel_promise_policy, ForwardIt first, ForwardIt last)
 {
   if (first == last)
     return {};
   
-  using ReturnType = typename std::iterator_traits<ForwardIt>::value_type;
+  using ReturnType = iterator_traits_v<ForwardIt>;
   std::list<std::future<ReturnType>> acc_futures;
   auto block = [&acc_futures] (auto block_start, auto block_end) mutable {
     auto acc = [](std::promise<ReturnType> p, auto start, auto end) {
@@ -168,13 +167,13 @@ reduce(execution::parallel_promise_policy, ForwardIt first, ForwardIt last)
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::parallel_packaged_task_policy, ForwardIt first, ForwardIt last)
 {
   if (first == last)
     return {};
   
-  using ReturnType = typename std::iterator_traits<ForwardIt>::value_type;
+  using ReturnType = iterator_traits_v<ForwardIt>;
   std::list<std::future<ReturnType>> acc_futures;
   auto block = [&acc_futures] (auto block_start, auto block_end) mutable {
     auto acc = [](auto start, auto end) -> ReturnType {
@@ -196,13 +195,13 @@ reduce(execution::parallel_packaged_task_policy, ForwardIt first, ForwardIt last
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::parallel_async_policy, ForwardIt first, ForwardIt last)
 {
   if (first == last)
     return {};
   
-  using ReturnType = typename std::iterator_traits<ForwardIt>::value_type;
+  using ReturnType = iterator_traits_v<ForwardIt>;
   std::list<std::future<ReturnType>> acc_futures;
   auto block = [&acc_futures] (auto block_start, auto block_end) mutable {
     auto acc = [](auto start, auto end) -> ReturnType {
@@ -221,14 +220,13 @@ reduce(execution::parallel_async_policy, ForwardIt first, ForwardIt last)
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::parallel_cv_policy, ForwardIt first, ForwardIt last)
 {
   if (first == last)
     return {};
   
-  using ReturnType = typename std::iterator_traits<ForwardIt>::value_type;
-  
+  using ReturnType = iterator_traits_v<ForwardIt>;
   std::list<ReturnType> rets;
   std::condition_variable cv;
   std::mutex mut;
@@ -261,13 +259,13 @@ reduce(execution::parallel_cv_policy, ForwardIt first, ForwardIt last)
 }
 
 template <class ForwardIt>
-typename std::iterator_traits<ForwardIt>::value_type
+iterator_traits_v<ForwardIt>
 reduce(execution::parallel_barrier_policy, ForwardIt first, ForwardIt last)
 {
   if (first == last)
     return {};
   
-  using ReturnType = typename std::iterator_traits<ForwardIt>::value_type;
+  using ReturnType = iterator_traits_v<ForwardIt>;
   std::list<ReturnType> rets;
   std::promise<ReturnType> p;
   std::future<ReturnType> ret = p.get_future();
