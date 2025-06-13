@@ -11,6 +11,9 @@ void f_rT(T& param) {
   int i{};
   T t_type = i;
   param;
+  using boost::typeindex::type_id_with_cvr;
+  std::cout << "T = " << type_id_with_cvr<T>().pretty_name();
+  std::cout << ", param= " << type_id_with_cvr<decltype(param)>().pretty_name() << "\n";
 }
 
 template<class T>

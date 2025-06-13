@@ -48,11 +48,11 @@ TEST(utility, toUType)
   ASSERT_EQ(e5, c5);
 }
 
-TEST(utility, iterator_traits_v)
+TEST(utility, iterator_traits_t)
 {
-  using int_t = nsb::iterator_traits_v<decltype(std::declval<std::array<int, 0>>().begin())>;
-  using double_t = nsb::iterator_traits_v<decltype(std::declval<std::vector<double>>().end())>;
-  using long_long_t = nsb::iterator_traits_v<decltype(std::declval<std::vector<long long>>().cend())>;
+  using int_t = nsb::iterator_traits_t<decltype(std::declval<std::array<int, 0>>().begin())>;
+  using double_t = nsb::iterator_traits_t<decltype(std::declval<std::vector<double>>().end())>;
+  using long_long_t = nsb::iterator_traits_t<decltype(std::declval<std::vector<long long>>().cend())>;
 
   testing::StaticAssertTypeEq<int_t, int>();
   testing::StaticAssertTypeEq<double_t, double>();

@@ -51,47 +51,47 @@ inline constexpr execution::parallel_latch_policy           PAR_LATCH;
 
 
 template <class ExecutionPolicy, class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(ExecutionPolicy&& policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::std_sequenced_accumulate_policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::std_sequenced_reduce_policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::sequenced_policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::parallel_thread_policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::parallel_jthread_policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::parallel_promise_policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::parallel_packaged_task_policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::parallel_async_policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::parallel_cv_policy, ForwardIt first, ForwardIt last);
 
 template <class ForwardIt>
-iterator_traits_v<ForwardIt>
+iterator_traits_t<ForwardIt>
 reduce(execution::parallel_barrier_policy, ForwardIt first, ForwardIt last);
 
 } // nsb::numeric
