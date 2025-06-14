@@ -94,6 +94,10 @@ template <class ForwardIt>
 iterator_traits_t<ForwardIt>
 reduce(execution::parallel_barrier_policy, ForwardIt first, ForwardIt last);
 
+template <class Execution, class Container>
+auto
+reduce(Execution&& e, const Container& c);
+
 } // nsb::numeric
 
 #include "reduce.hpp"

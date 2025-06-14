@@ -292,4 +292,11 @@ reduce(execution::parallel_barrier_policy, ForwardIt first, ForwardIt last)
   return ret.get();
 }
 
+template <class Execution, class Container>
+auto
+reduce(Execution&& e, const Container& c)
+{
+  return nsb::numeric::reduce(std::forward<Execution>(e), std::cbegin(c), std::cend(c));
+}
+
 } // nsb::numeric

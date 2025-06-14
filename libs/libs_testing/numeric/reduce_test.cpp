@@ -91,3 +91,37 @@ TYPED_TEST(ReduceTest, reduce)
     ASSERT_EQ(s2, std::string{"0123456789"});
   }
 }
+
+TYPED_TEST(ReduceTest, reduce_for_container)
+{
+  // Arrange
+  using namespace std::string_literals;
+  const std::vector<int> vi(160, 2);
+  constexpr std::array<float, 0> af{};
+  constexpr std::array ad{0., 1.1, 2.2, 3., 4., 5., 6., 7., 8., 9.};
+  const unsigned long long all[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  const std::array<std::string, 10> as{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+
+  // Act
+  const auto e = typename TestFixture::Execution{};
+  const auto i = nsb::numeric::reduce(e, vi);
+  const auto f = nsb::numeric::reduce(e, af);
+  const auto d = nsb::numeric::reduce(e, ad);
+  const auto ll = nsb::numeric::reduce(e, all);
+  const auto ui = nsb::numeric::reduce(e, std::vector<uint16_t>{500, 50, 5});
+  const auto s = nsb::numeric::reduce(e, as);
+
+  // Assert
+  ASSERT_EQ(i, 320);
+  ASSERT_EQ(f, 0);
+  ASSERT_EQ(d, 45.3);
+  ASSERT_EQ(ui, 555);
+  ASSERT_EQ(ll, 45ull);
+
+  if constexpr (std::is_same_v< typename TestFixture::Execution, execution::std_unsequenced_policy>) {
+    GTEST_SKIP() << "SKIP std_unsequenced_policy (reduce_for_container) [" << s << "]";
+  }
+  else {
+    ASSERT_EQ(s, std::string{"0123456789"});
+  }
+}
