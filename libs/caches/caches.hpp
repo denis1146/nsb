@@ -14,12 +14,18 @@ Value Lru<Key, Value>::get(const Key& key) const
 {
   auto hit = m_hash.find(key);
   if (hit == m_hash.end()) {
-    if (size() == maxSize()) {
-      m_hash.erase(m_cache.back().first);
-      m_cache.pop_back();
+    if (size() != maxSize()) {
+      m_cache.emplace_front(key, m_slowGetValue(key));
+      m_hash.emplace(key, m_cache.begin());
     }
-    m_cache.emplace_front(key, m_slowGetValue(key));
-    m_hash.emplace(key, m_cache.begin());
+    else {
+      auto node = m_hash.extract(m_cache.back().first);
+      m_cache.splice(m_cache.begin(), m_cache, --m_cache.end());
+      m_cache.front() = {key, m_slowGetValue(key)};
+      node.key() = key;
+      node.mapped() = m_cache.begin();
+      m_hash.insert(std::move(node));
+    }
   }
   else {
     auto eltit = hit->second;
@@ -100,13 +106,18 @@ Value Fifo<Key, Value>::get(const Key& key) const
   if (auto val = getFast(key))
     return *val;
 
-  if (size() == maxSize()) {
-    m_hash.erase(m_cache.front().first);
-    m_cache.pop_back();
+  if (size() != maxSize()) {
+    m_cache.emplace_back(key, m_slowGetValue(key));
+    m_hash.emplace(key, --m_cache.end());
   }
-
-  m_cache.emplace_back(key, m_slowGetValue(key));
-  m_hash.emplace(key, --m_cache.end());
+  else {
+    auto node = m_hash.extract(m_cache.front().first);
+    m_cache.pop_front();
+    m_cache.emplace_back(key, m_slowGetValue(key));
+    node.key() = key;
+    node.mapped() = --m_cache.end();
+    m_hash.insert(std::move(node));
+  }
   return m_cache.back().second;
 }
 
