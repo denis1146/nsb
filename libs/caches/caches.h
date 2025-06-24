@@ -20,7 +20,14 @@ public:
   using AllCache = std::vector<std::pair<Key, Value>>;
   using SlowGetValue = std::function<Value(const Key&)>;
 
+  Lru(const Lru& rhs);
+  Lru(Lru&& rhs) = default;
+  Lru& operator=(const Lru& rhs);
+  Lru& operator=(Lru&& rhs) = default;
+
+  explicit Lru(SlowGetValue slowGetValue);
   Lru(size_t maxSize, SlowGetValue slowGetValue);
+
   [[nodiscard]] Value get(const Key& key) const;
   [[nodiscard]] std::optional<Value> getFast(const Key& key) const;
   [[nodiscard]] AllCache getAll() const;
@@ -35,7 +42,7 @@ public:
 private:
   using ListIt = typename std::list<std::pair<Key, Value>>::iterator;
 
-  const size_t m_maxSize;
+  size_t m_maxSize;
   SlowGetValue m_slowGetValue;
   mutable std::list<std::pair<Key, Value>> m_cache;
   mutable std::unordered_map<Key, ListIt> m_hash;
@@ -52,7 +59,14 @@ public:
   using AllCache = std::vector<std::pair<Key, Value>>;
   using SlowGetValue = std::function<Value(const Key&)>;
 
+  Fifo(const Fifo& rhs);
+  Fifo(Fifo&& rhs) = default;
+  Fifo& operator=(const Fifo& rhs);
+  Fifo& operator=(Fifo&& rhs) = default;
+
+  explicit Fifo(SlowGetValue slowGetValue);
   Fifo(size_t maxSize, SlowGetValue slowGetValue);
+
   [[nodiscard]] Value get(const Key& key) const;
   [[nodiscard]] std::optional<Value> getFast(const Key& key) const;
   [[nodiscard]] AllCache getAll() const;
@@ -67,7 +81,7 @@ public:
 private:
   using ListIt = typename std::deque<std::pair<Key, Value>>::iterator;
 
-  const size_t m_maxSize;
+  size_t m_maxSize;
   SlowGetValue m_slowGetValue;
   mutable std::deque<std::pair<Key, Value>> m_cache;
   mutable std::unordered_map<Key, ListIt> m_hash;

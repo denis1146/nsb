@@ -46,6 +46,143 @@ using CacheTypes = ::testing::Types<
 >;
 TYPED_TEST_SUITE(CacheTest, CacheTypes);
 
+
+template<class Cache>
+class CopyMoveOpCacheTest: public testing::Test
+{
+public:
+  using CacheType = Cache;
+  using ToStingFunc = std::string(*)(int);
+  ToStingFunc toSting { &std::to_string };
+};
+
+using CopyMoveOpCacheTypes = ::testing::Types<
+  nsb::caches::Lru<int, std::string>
+, nsb::caches::Fifo<int, std::string>
+>;
+
+TYPED_TEST_SUITE(CopyMoveOpCacheTest, CopyMoveOpCacheTypes);
+
+}
+
+TYPED_TEST(CopyMoveOpCacheTest, copyConstructor)
+{
+  // Arrange
+  using CacheType = typename TestFixture::CacheType;
+  CacheType cache{ this->toSting };
+  [[maybe_unused]] const auto v = cache.get(0);
+  [[maybe_unused]] const auto v1 = cache.get(1);
+  [[maybe_unused]] const auto v2 = cache.get(2);
+  const auto vals = cache.getAll();
+  const auto maxSize =cache.maxSize();
+
+  // Act
+  CacheType cache1{ cache };
+  const auto vals1 = cache1.getAll();
+  const auto maxSize1 =cache1.maxSize();
+
+  // Assert
+  ASSERT_EQ(vals1, vals);
+  ASSERT_EQ(maxSize1, maxSize);
+}
+
+TYPED_TEST(CopyMoveOpCacheTest, moveConstructor)
+{
+  // Arrange
+  using CacheType = typename TestFixture::CacheType;
+  CacheType cache{ this->toSting };
+  [[maybe_unused]] const auto v = cache.get(0);
+  [[maybe_unused]] const auto v1 = cache.get(1);
+  [[maybe_unused]] const auto v2 = cache.get(2);
+  const auto vals = cache.getAll();
+  const auto maxSize =cache.maxSize();
+
+  // Act
+  CacheType cache1{ std::move(cache) };
+  const auto vals1 = cache1.getAll();
+  const auto maxSize1 =cache1.maxSize();
+  const auto isEmpty = cache.getAll().empty();
+  const auto size = cache.size();
+
+  // Assert
+  ASSERT_EQ(vals1, vals);
+  ASSERT_EQ(maxSize1, maxSize);
+  ASSERT_TRUE(isEmpty);
+  ASSERT_EQ(size, 0);
+}
+
+TYPED_TEST(CopyMoveOpCacheTest, copyAssignmentOperator)
+{
+  // Arrange
+  using CacheType = typename TestFixture::CacheType;
+  CacheType cache{ this->toSting };
+  [[maybe_unused]] const auto v = cache.get(0);
+  [[maybe_unused]] const auto v1 = cache.get(1);
+  [[maybe_unused]] const auto v2 = cache.get(2);
+  const auto vals = cache.getAll();
+  const auto maxSize =cache.maxSize();
+  constexpr size_t defaultMaxSize { 1 };
+
+  // Act
+  CacheType cache1{ defaultMaxSize, this->toSting };
+  const auto defMaxSize1 =cache1.maxSize();
+  cache1 = cache;
+  const auto vals1 = cache1.getAll();
+  const auto maxSize1 =cache1.maxSize();
+
+  // Assert
+  ASSERT_EQ(vals1, vals);
+  ASSERT_EQ(maxSize1, maxSize);
+  ASSERT_EQ(defMaxSize1, defaultMaxSize);
+  ASSERT_NE(defMaxSize1, maxSize);
+}
+
+TYPED_TEST(CopyMoveOpCacheTest, moveAssignmentOperator)
+{
+  // Arrange
+  using CacheType = typename TestFixture::CacheType;
+  constexpr size_t defaultMaxSize { 1 };
+  CacheType cache{ defaultMaxSize, this->toSting };
+  [[maybe_unused]] const auto v = cache.get(0);
+  [[maybe_unused]] const auto v1 = cache.get(1);
+  [[maybe_unused]] const auto v2 = cache.get(2);
+  const auto vals = cache.getAll();
+  const auto maxSize =cache.maxSize();
+
+  // Act
+  CacheType cache1{ defaultMaxSize, this->toSting };
+  cache1 = std::move(cache);
+
+  const auto vals1 = cache1.getAll();
+  const auto maxSize1 = cache1.maxSize();
+  const auto isEmpty = cache.getAll().empty();
+  const auto size = cache.size();
+
+  // Assert
+  ASSERT_EQ(vals1, vals);
+  ASSERT_EQ(maxSize1, maxSize);
+  ASSERT_TRUE(isEmpty);
+  ASSERT_EQ(size, 0);
+}
+
+TYPED_TEST(CopyMoveOpCacheTest, constructor_slowGetValue)
+{
+  using CacheType = typename TestFixture::CacheType;
+
+  CacheType cache{ this->toSting };
+
+  ASSERT_EQ(cache.size(), 0);
+}
+
+TYPED_TEST(CopyMoveOpCacheTest, constructor_maxSize_slowGetValue)
+{
+  using CacheType = typename TestFixture::CacheType;
+  constexpr size_t defaultMaxSize { 50 };
+
+  CacheType cache{ defaultMaxSize, this->toSting };
+
+  ASSERT_EQ(cache.maxSize(), defaultMaxSize);
+  ASSERT_EQ(cache.size(), 0);
 }
 
 TYPED_TEST(CacheTest, get)

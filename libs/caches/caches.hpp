@@ -1,6 +1,42 @@
 namespace nsb::caches {
 
+namespace {
+
+constexpr size_t DEF_MAX_SIZE{ 5 };
+
+}
+
 // Lru
+template <class Key, class Value>
+Lru<Key, Value>::Lru(const Lru& rhs)
+: Lru(rhs.m_maxSize, rhs.m_slowGetValue)
+{
+  m_cache = rhs.m_cache;
+  
+  auto it = std::begin(m_cache);
+  auto itEnd  = std::end(m_cache);
+  m_hash.reserve(m_cache.size());
+  while (it != itEnd) {
+    m_hash.emplace(it->first, it++);
+  }
+}
+
+template <class Key, class Value>
+Lru<Key, Value>& Lru<Key, Value>::operator=(const Lru<Key, Value>& rhs)
+{
+  if (this != &rhs) {
+    auto tmp = rhs;
+    *this = std::move(tmp);
+  }
+  return *this;
+}
+
+template <class Key, class Value>
+Lru<Key, Value>::Lru(SlowGetValue slowGetValue)
+: Lru(DEF_MAX_SIZE, slowGetValue)
+{
+}
+
 template <class Key, class Value>
 Lru<Key, Value>::Lru(size_t maxSize, SlowGetValue slowGetValue)
 : m_maxSize{ maxSize }
@@ -92,6 +128,36 @@ size_t Lru<Key, Value>::size() const
 // ~Lru
 
 // Fifo
+template <class Key, class Value>
+Fifo<Key, Value>::Fifo(const Fifo& rhs)
+: Fifo(rhs.m_maxSize, rhs.m_slowGetValue)
+{
+  m_cache = rhs.m_cache;
+  
+  auto it = std::begin(m_cache);
+  auto itEnd  = std::end(m_cache);
+  m_hash.reserve(m_cache.size());
+  while (it != itEnd) {
+    m_hash.emplace(it->first, it++);
+  }
+}
+
+template <class Key, class Value>
+Fifo<Key, Value>& Fifo<Key, Value>::operator=(const Fifo<Key, Value>& rhs)
+{
+  if (this != &rhs) {
+    auto tmp = rhs;
+    *this = std::move(tmp);
+  }
+  return *this;
+}
+
+template <class Key, class Value>
+Fifo<Key, Value>::Fifo(SlowGetValue slowGetValue)
+: Fifo(DEF_MAX_SIZE, slowGetValue)
+{
+}
+
 template <class Key, class Value>
 Fifo<Key, Value>::Fifo(size_t maxSize, SlowGetValue slowGetValue)
 : m_maxSize{ maxSize }
