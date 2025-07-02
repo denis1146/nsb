@@ -5,6 +5,10 @@ configure_file(mainConfig.h.in mainConfig.h @ONLY)
 
 #set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo")
 
+include(CTest)
+include(GoogleTest)
+enable_testing()
+
 add_library(nsb_compile_options INTERFACE)
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")

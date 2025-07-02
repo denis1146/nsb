@@ -41,3 +41,11 @@ PRIVATE
   libs
   gtest
 )
+
+gtest_discover_tests(libs_testing
+  # TEST_FILTER "utility*"
+)
+
+add_test(NAME ALL_TESTS
+  COMMAND libs_testing
+)
