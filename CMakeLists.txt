@@ -5,10 +5,6 @@ configure_file(mainConfig.h.in mainConfig.h @ONLY)
 
 #set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo")
 
-include(CTest)
-include(GoogleTest)
-enable_testing()
-
 add_library(nsb_compile_options INTERFACE)
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
@@ -29,6 +25,30 @@ target_compile_features(nsb_standard_flags INTERFACE cxx_std_23)
 #set(CMAKE_CXX_STANDARD 20)
 #set(CMAKE_CXX_STANDARD_REQUIRED True)
 # set_property(TARGET app CXX_STANDARD 23)
+
+# External libraries:
+set(EXT_LIBS "ext_libs")
+
+include(CTest)
+include(GoogleTest)
+enable_testing()
+
+find_package(Boost 1.88.0 EXACT REQUIRED
+PATHS "${CMAKE_SOURCE_DIR}/${EXT_LIBS}/boost_1_88_0"
+)
+message(STATUS "BOOST ${Boost_VERSION}")
+
+add_library(nsb_ext_boost INTERFACE)
+target_include_directories(nsb_ext_boost INTERFACE ${Boost_INCLUDE_DIRS})
+# target_link_libraries(nsb_ext_boost INTERFACE Boost::headers)
+
+add_library(nsb_ext_all_libs INTERFACE)
+target_link_libraries(nsb_ext_all_libs
+INTERFACE
+  nsb_ext_boost
+)
+
+# ~External libraries
 
 add_subdirectory(app)
 add_subdirectory(libs)
