@@ -33,6 +33,18 @@ include(CTest)
 include(GoogleTest)
 enable_testing()
 
+find_package(GTest 1.17.0 EXACT REQUIRED
+PATHS "${CMAKE_SOURCE_DIR}/${EXT_LIBS}/gtest_1_17_0"
+)
+message(STATUS "GTest ${GTest_VERSION}")
+
+add_library(nsb_ext_gtest INTERFACE)
+target_link_libraries(nsb_ext_gtest
+INTERFACE
+  GTest::gtest
+  GTest::gtest_main
+)
+
 find_package(Boost 1.88.0 EXACT REQUIRED
 PATHS "${CMAKE_SOURCE_DIR}/${EXT_LIBS}/boost_1_88_0"
 )
@@ -45,6 +57,7 @@ target_include_directories(nsb_ext_boost INTERFACE ${Boost_INCLUDE_DIRS})
 add_library(nsb_ext_all_libs INTERFACE)
 target_link_libraries(nsb_ext_all_libs
 INTERFACE
+  nsb_ext_gtest
   nsb_ext_boost
 )
 
@@ -55,9 +68,6 @@ add_subdirectory(libs)
 
 # External exercises
 add_subdirectory(ext_exercises)
-
-# External libraries:
-add_subdirectory(ext_libs/googletest)
 
 #[[
 message(STATUS "=== Print system information:")

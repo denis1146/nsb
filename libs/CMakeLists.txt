@@ -42,8 +42,8 @@ PRIVATE
   nsb_standard_flags
   nsb_compile_options
   # nsb_compile_options_for_dev
+  nsb_ext_gtest
   libs
-  gtest
 )
 
 gtest_discover_tests(libs_testing
