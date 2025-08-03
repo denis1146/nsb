@@ -3,6 +3,7 @@
 #include <array>
 
 #include "utility.h"
+#include "containers/iterator.h"
 
 TEST(utility, toUType)
 {

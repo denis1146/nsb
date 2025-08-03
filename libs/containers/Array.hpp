@@ -116,7 +116,7 @@ constexpr typename Array<T, N>::const_reverse_iterator Array<T, N>::rbegin() con
 }
 
 template<class T, std::size_t N>
-constexpr typename Array<T, N>::const_reverse_iterator Array<T, N>::rcbegin()
+constexpr typename Array<T, N>::const_reverse_iterator Array<T, N>::crbegin()
 {
   return const_reverse_iterator(end());
 }
@@ -134,7 +134,7 @@ constexpr typename Array<T, N>::const_reverse_iterator Array<T, N>::rend() const
 }
 
 template<class T, std::size_t N>
-constexpr typename Array<T, N>::const_reverse_iterator Array<T, N>::rcend()
+constexpr typename Array<T, N>::const_reverse_iterator Array<T, N>::crend()
 {
   return const_reverse_iterator(begin());
 }

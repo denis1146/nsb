@@ -5,6 +5,7 @@ add_library(libs STATIC
   caches/caches.hpp
   containers/Array.h
   containers/Array.hpp
+  containers/iterator.h
   NsbVector/NsbVector.h
   NsbVector/NsbVector.cpp
   numeric/reduce.h
@@ -27,6 +28,7 @@ PRIVATE
 add_executable(libs_testing
   "libs_testing/caches/caches_test.cpp"
   "libs_testing/containers/Array_test.cpp"
+  "libs_testing/containers/iterator_test.cpp"
   "libs_testing/numeric/reduce_test.cpp"
   "libs_testing/main.cpp"
   "libs_testing/utility_test.cpp"
@@ -43,6 +45,7 @@ PRIVATE
   nsb_compile_options
   # nsb_compile_options_for_dev
   nsb_ext_gtest
+  nsb_ext_boost
   libs
 )
 

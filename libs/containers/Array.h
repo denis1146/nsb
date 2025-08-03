@@ -44,10 +44,10 @@ struct Array
 
   constexpr reverse_iterator rbegin();
   constexpr const_reverse_iterator rbegin() const;
-  constexpr const_reverse_iterator rcbegin();
+  constexpr const_reverse_iterator crbegin();
   constexpr reverse_iterator rend();
   constexpr const_reverse_iterator rend() const;
-  constexpr const_reverse_iterator rcend();
+  constexpr const_reverse_iterator crend();
 
   static constexpr bool empty() noexcept;
   static constexpr size_type size() noexcept;

@@ -107,8 +107,8 @@ TEST_F(ArrayTest, Iterators)
   ASSERT_EQ(*(std::as_const(arr1)).rbegin(), v2);
   ASSERT_EQ(*(std::as_const(arr1).rend() - 1), v1);
 
-  ASSERT_EQ(*arr1.rcbegin(), v2);
-  ASSERT_EQ(*(arr1.rcend() - 1), v1);
+  ASSERT_EQ(*arr1.crbegin(), v2);
+  ASSERT_EQ(*(arr1.crend() - 1), v1);
 }
 
 TEST_F(ArrayTest, Capacity)
