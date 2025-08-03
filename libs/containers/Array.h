@@ -102,7 +102,10 @@ constexpr auto operator<=>(const Array<T, N>& lhs, const Array<T, N>& rhs)
 -> decltype(lhs[0] <=> rhs[0]);
 
 template<typename T, std::size_t N>
-void swap(Array<T, N>& lhs, Array<T, N>& rhs);
+void swap(T (&lhs)[N], T (&rhs)[N]) noexcept(noexcept(std::swap(*lhs, *rhs)));
+
+template<typename T, std::size_t N>
+void swap(Array<T, N>& lhs, Array<T, N>& rhs) noexcept(noexcept(nsb::containers::swap(lhs.arr, rhs.arr)));
 
 } // nsb::containers
 

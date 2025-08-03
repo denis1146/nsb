@@ -216,9 +216,16 @@ constexpr auto operator<=>(const Array<T, N>& lhs, const Array<T, N>& rhs)
 }
 
 template<typename T, std::size_t N>
-void swap(Array<T, N>& lhs, Array<T, N>& rhs)
+void swap(T (&lhs)[N], T (&rhs)[N]) noexcept(noexcept(std::swap(*lhs, *rhs)))
 {
-  std::swap(lhs.arr, rhs.arr);  
+  for(std::size_t i = 0; i < N; ++i)
+    std::swap(lhs[i], rhs[i]);
+}
+
+template<typename T, std::size_t N>
+void swap(Array<T, N>& lhs, Array<T, N>& rhs) noexcept(noexcept(nsb::containers::swap(lhs.arr, rhs.arr)))
+{
+  nsb::containers::swap(lhs.arr, rhs.arr);  
 }
 
 } // nsb::containers
