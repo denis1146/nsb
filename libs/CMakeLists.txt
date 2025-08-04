@@ -10,6 +10,7 @@ add_library(libs STATIC
   NsbVector/NsbVector.cpp
   numeric/reduce.h
   numeric/reduce.hpp
+  type_traits.h
   utility.h
 )
 target_link_libraries(libs
@@ -31,6 +32,7 @@ add_executable(libs_testing
   "libs_testing/containers/iterator_test.cpp"
   "libs_testing/numeric/reduce_test.cpp"
   "libs_testing/main.cpp"
+  "libs_testing/type_traits_test.cpp"
   "libs_testing/utility_test.cpp"
 )
 target_include_directories(libs_testing
