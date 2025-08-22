@@ -1,7 +1,8 @@
 
-#include "Pimpl/Pimpl.h"
-#include <utility>
 #include <iostream>
+
+#include "Pimpl/Pimpl.h"
+#include "Factory/Factory.h"
 
 int main(int /* argc */, char* /* argv */[])
 {
@@ -14,6 +15,9 @@ int main(int /* argc */, char* /* argv */[])
   p2 = p;
   p2 = p;
   std::cout << p.get() << std::endl;
+
+  // Factory ===========================
+  std::cout << getFooFactory()->show() << std::endl;
 
   return 0;
 }
