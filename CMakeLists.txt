@@ -60,14 +60,15 @@ INTERFACE
   nsb_ext_gtest
   nsb_ext_boost
 )
-
 # ~External libraries
 
 add_subdirectory(app)
 add_subdirectory(libs)
+add_subdirectory(notes)
 
 # External exercises
 add_subdirectory(ext_exercises)
+# ~External exercises
 
 #[[
 message(STATUS "=== Print system information:")
