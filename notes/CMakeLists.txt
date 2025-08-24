@@ -2,6 +2,8 @@ project(notes VERSION 0.0.1)
 
 add_library(notes_lib
 STATIC
+  Boost/ProgramOptions/ProgramOptions.h
+  Boost/ProgramOptions/ProgramOptions.cpp
   Factory/Factory.h
   Factory/Factory.cpp
   Pimpl/Pimpl.h
@@ -12,6 +14,7 @@ target_link_libraries(notes_lib
 PRIVATE
   nsb_standard_flags
   nsb_compile_options_for_dev
+  nsb_ext_boost
   libs
 )
 

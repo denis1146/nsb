@@ -46,13 +46,18 @@ INTERFACE
 )
 
 find_package(Boost 1.88.0 EXACT REQUIRED
+COMPONENTS
+  program_options
 PATHS "${CMAKE_SOURCE_DIR}/${EXT_LIBS}/boost_1_88_0"
 )
 message(STATUS "BOOST ${Boost_VERSION}")
 
 add_library(nsb_ext_boost INTERFACE)
 target_include_directories(nsb_ext_boost INTERFACE ${Boost_INCLUDE_DIRS})
-# target_link_libraries(nsb_ext_boost INTERFACE Boost::headers)
+target_link_libraries(nsb_ext_boost
+INTERFACE 
+  Boost::program_options
+)
 
 add_library(nsb_ext_all_libs INTERFACE)
 target_link_libraries(nsb_ext_all_libs
