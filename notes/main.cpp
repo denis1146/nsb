@@ -3,6 +3,7 @@
 
 #include "Pimpl/Pimpl.h"
 #include "Factory/Factory.h"
+#include "Boost/ProgramOptions/ProgramOptions.h"
 
 int main(int /* argc */, char* /* argv */[])
 {
@@ -18,6 +19,13 @@ int main(int /* argc */, char* /* argv */[])
 
   // Factory ===========================
   std::cout << getFooFactory()->show() << std::endl;
+
+  // Boost =============================
+  auto boostSt = std::string(20, '=') + " Boost " + std::string(20, '=');
+  std::cout << boostSt << std::endl;
+  ProgramOptions::run();
+  std::cout << boostSt << std::endl;
+  // Boost =============================
 
   return 0;
 }
