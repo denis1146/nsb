@@ -3,8 +3,13 @@
 basePath=$(pwd)
 targetLibs="${basePath}/.."
 tmpPath="${basePath}/tmp"
-
-threads=$(lscpu | grep -i "cpu(s):" | head -n 1 | tr " " "\n" | tail -n 1)
+isLinux=true
+if $isLinux;
+then
+  threads=$(lscpu | grep -i "cpu(s):" | head -n 1 | tr " " "\n" | tail -n 1)
+else
+  threads=16
+fi
 echo "CPU(s): ${threads}"
 
 # Boost
@@ -32,12 +37,24 @@ else
   mkdir _build
   cd _build
   cmake ..
-  cmake --build . -- -j $threads
+  if $isLinux;
+  then
+    cmake --build . -- -j $threads
+  else
+    cmake --build . --config Debug -- -maxCpuCount
+    cmake --build . --config Release -- -maxCpuCount
+  fi
 fi
 
 # Installatio
 cd "${boostPath}/_build"
-cmake --install . --prefix "${targetLibs}/${boost_1_88_0}"
+if $isLinux;
+then
+  cmake --install . --prefix "${targetLibs}/${boost_1_88_0}"
+else
+  cmake --install . --config Debug --prefix "${targetLibs}/${boost_1_88_0}/Debug"
+  cmake --install . --config Release --prefix "${targetLibs}/${boost_1_88_0}/Release"
+fi
 # ~Boost
 
 # GTest
@@ -65,11 +82,22 @@ else
   mkdir _build
   cd _build
   cmake ..
-  cmake --build . -- -j $threads
+  if $isLinux;
+  then
+    cmake --build . -- -j $threads
+  else
+    cmake --build . --config Debug -- -maxCpuCount
+    cmake --build . --config Release -- -maxCpuCount
+  fi
 fi
 
 # Installation
 cd "${gtestPath}/_build"
-cmake --install . --prefix "${targetLibs}/${gtest_1_17_0}"
-
+if $isLinux;
+then
+  cmake --install . --prefix "${targetLibs}/${gtest_1_17_0}"
+else
+  cmake --install . --config Debug --prefix "${targetLibs}/${gtest_1_17_0}/Debug"
+  cmake --install . --config Release --prefix "${targetLibs}/${gtest_1_17_0}/Release"
+fi
 # ~GTest
