@@ -2,6 +2,7 @@
 #include <charconv>
 #include <string>
 #include <array>
+#include <algorithm>
 
 #include "caches.h"
 

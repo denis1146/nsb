@@ -271,7 +271,7 @@ reduce(execution::parallel_barrier_policy, ForwardIt first, ForwardIt last)
   std::future<ReturnType> ret = p.get_future();
   bool isReady = false;
   const std::size_t num_threads = details::getThreadCount(std::distance(first, last));
-  std::barrier sync(num_threads, [&rets, &isReady, p = std::move(p)] mutable {
+  std::barrier sync(num_threads, [&rets, &isReady, p = std::move(p)] mutable noexcept {
     if (isReady) 
       p.set_value(reduce(SEQ, rets.cbegin(), rets.cend()));
     isReady = true;

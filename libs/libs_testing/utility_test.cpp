@@ -13,14 +13,14 @@ TEST(utility, toUType)
   constexpr auto c3 = 3;
   constexpr auto c4 = 4;
   constexpr auto c5 = 5;
-  enum       E1 : uint8_t  { E1 = c1, };
+  enum       E1 : uint8_t  { E_1 = c1, };
   enum class E2            { E2 = c2, };
   enum class E3 : unsigned { E3 = c3, };
   enum class E4 : int      { E4 = c4, };
   enum class E5 : uint8_t  { E5 = c5, };
 
   // Act
-  constexpr auto e1 = nsb::toUType(E1::E1);
+  constexpr auto e1 = nsb::toUType(E1::E_1);
   constexpr auto e2 = nsb::toUType(E2::E2);
   constexpr auto e3 = nsb::toUType(E3::E3);
   constexpr auto e4 = nsb::toUType(E4::E4);

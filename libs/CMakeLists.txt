@@ -19,8 +19,13 @@ PRIVATE
   nsb_standard_flags
   nsb_compile_options
   # nsb_compile_options_for_dev
+)
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+target_link_libraries(libs
+PRIVATE
   tbb
 )
+endif ()
 
 target_include_directories(libs
 PRIVATE

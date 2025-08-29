@@ -80,7 +80,7 @@ void ProgramOptions::run()
       ;
 
       po::variables_map vm;
-      po::store(po::parse_command_line(args.size(), args.data(), desc), vm);
+      po::store(po::parse_command_line(static_cast<int>(args.size()), args.data(), desc), vm);
       po::notify(vm);
 
       if (vm.count(optHelp)) {
@@ -109,7 +109,7 @@ void ProgramOptions::run()
       p.add(pod, -1)
         .add(optList, 1)      // <<<
       ;
-      po::store(po::command_line_parser(args.size(), args.data()) 
+      po::store(po::command_line_parser(static_cast<int>(args.size()), args.data()) 
         .options(desc).positional(p).run(), vmPod); 
       po::notify(vmPod);
 
@@ -166,7 +166,7 @@ void ProgramOptions::run()
       };
 
       po::variables_map vmml;
-      store(po::command_line_parser(args2.size(), args2.data()).
+      store(po::command_line_parser(static_cast<int>(args2.size()), args2.data()).
         options(cmdlineOptions).positional(podHidden).run(), vmml);
       notify(vmml);
 

@@ -8,6 +8,7 @@
 #include <sstream>
 #include <forward_list>
 #include <list>
+#include <algorithm>
 
 // #include <print>
 // #include <stdfloat>
@@ -46,7 +47,7 @@ int main(int argc, char *argv[])
   // std::float64_t f = 0.1f64;
 
   double d = 5.5;
-  int i = d;
+  int i = static_cast<int>(d);
   cout << d << i << endl; // Comment
 
   // TODO: 555
