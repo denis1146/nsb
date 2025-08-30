@@ -17,7 +17,8 @@ Lru<Key, Value>::Lru(const Lru& rhs)
   auto itEnd  = std::end(m_cache);
   m_hash.reserve(m_cache.size());
   while (it != itEnd) {
-    m_hash.emplace(it->first, it++);
+    m_hash.emplace(it->first, it);
+    it++;
   }
 }
 
@@ -138,7 +139,8 @@ Fifo<Key, Value>::Fifo(const Fifo& rhs)
   auto itEnd  = std::end(m_cache);
   m_hash.reserve(m_cache.size());
   while (it != itEnd) {
-    m_hash.emplace(it->first, it++);
+    m_hash.emplace(it->first, it);
+    it++;
   }
 }
 
