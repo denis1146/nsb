@@ -79,11 +79,11 @@ public:
   [[nodiscard]] size_t size() const;
 
 private:
-  using ListIt = typename std::deque<std::pair<Key, Value>>::iterator;
+  using ListIt = typename std::list<std::pair<Key, Value>>::iterator;
 
   size_t m_maxSize;
   SlowGetValue m_slowGetValue;
-  mutable std::deque<std::pair<Key, Value>> m_cache;
+  mutable std::list<std::pair<Key, Value>> m_cache;
   mutable std::unordered_map<Key, ListIt> m_hash;
 };
 

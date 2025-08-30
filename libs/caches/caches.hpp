@@ -174,7 +174,7 @@ Value Fifo<Key, Value>::get(const Key& key) const
   if (auto val = getFast(key))
     return *val;
 
-  if (size() != maxSize()) {
+  if (size() < maxSize()) {
     m_cache.emplace_back(key, m_slowGetValue(key));
     m_hash.emplace(key, --m_cache.end());
   }
