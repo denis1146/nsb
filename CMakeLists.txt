@@ -7,8 +7,7 @@ add_library(nsb_compile_options INTERFACE)
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
 target_compile_options(nsb_compile_options INTERFACE
-#"$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
-"$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Werror;-Wpedantic;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
+"$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Werror;-Wpedantic;-Wextra;-Wformat=2;-Wunused>>"
 "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
 )
 
