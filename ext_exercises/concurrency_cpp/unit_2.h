@@ -6,6 +6,7 @@
 #include <chrono>
 #include <memory>
 #include <array>
+#include <cstdio>
 
 #include "ThreadGuard.h"
 #include "JThread.h"
@@ -39,11 +40,11 @@ static void test()
     };
 
     char buf[1024];
-    sprintf_s(buf, "  %s", "Buffer\n");
+    std::snprintf(buf, std::size(buf), "  %s", "Buffer\n");
     // copy buf = char*
     // std::thread t(func, buf);            // UB <==
     std::thread t(func, std::string(buf));
-    sprintf_s(buf, "");
+    std::snprintf(buf, std::size(buf), "");
     t.detach();
     std::this_thread::sleep_for(10ms);
   }
