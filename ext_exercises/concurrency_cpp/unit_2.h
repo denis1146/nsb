@@ -44,7 +44,7 @@ static void test()
     // copy buf = char*
     // std::thread t(func, buf);            // UB <==
     std::thread t(func, std::string(buf));
-    std::snprintf(buf, std::size(buf), "");
+    std::snprintf(buf, std::size(buf), "\n");
     t.detach();
     std::this_thread::sleep_for(10ms);
   }

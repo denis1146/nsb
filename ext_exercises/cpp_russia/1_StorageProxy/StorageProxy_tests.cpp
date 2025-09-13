@@ -47,7 +47,7 @@ void storageProxy_test_write()
   assert(storageProxy::type_index<bool>() == 4);
 
   // Alias
-  using CAlias = C;
+  using CAlias [[maybe_unused]] = C;
   assert(storageProxy::type_index<CAlias>::value() == 2);
 
   // Operator
