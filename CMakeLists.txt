@@ -23,29 +23,18 @@ target_compile_features(nsb_standard_flags INTERFACE cxx_std_23)
 #set(CMAKE_CXX_STANDARD_REQUIRED True)
 # set_property(TARGET app CXX_STANDARD 23)
 
+if ((${CMAKE_SYSTEM_NAME} MATCHES "Windows") AND (MSVC))
+  set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "notes")
+endif ()
+
 # External libraries:
 set(EXT_LIBS "ext_libs")
-set(EXT_LIBS_PREFIX "")
-if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-  if (MSVC)
-    set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "notes")
-    set(IS_DEBUG True)
-    if (${IS_DEBUG})
-      set(CMAKE_CONFIGURATION_TYPES "Debug;")
-      set(EXT_LIBS_PREFIX "Debug")
-    else ()
-      set(CMAKE_CONFIGURATION_TYPES "Release;")
-      set(EXT_LIBS_PREFIX "Release")
-    endif ()
-  endif ()
-endif ()
 
 include(CTest)
 include(GoogleTest)
 enable_testing()
-
 find_package(GTest 1.17.0 EXACT REQUIRED
-PATHS "${CMAKE_SOURCE_DIR}/${EXT_LIBS}/gtest_1_17_0/${EXT_LIBS_PREFIX}"
+PATHS "${CMAKE_SOURCE_DIR}/${EXT_LIBS}/gtest_1_17_0"
 )
 message(STATUS "GTest ${GTest_VERSION} [ ${GTest_DIR} ]")
 
@@ -59,9 +48,9 @@ INTERFACE
 find_package(Boost 1.88.0 EXACT REQUIRED
 COMPONENTS
   program_options
-PATHS "${CMAKE_SOURCE_DIR}/${EXT_LIBS}/boost_1_88_0/${EXT_LIBS_PREFIX}"
+PATHS "${CMAKE_SOURCE_DIR}/${EXT_LIBS}/boost_1_88_0"
 )
-message(STATUS "BOOST ${Boost_VERSION} [ ${GTest_DIR} ]")
+message(STATUS "BOOST ${Boost_VERSION} [ ${Boost_DIR} ]")
 
 add_library(nsb_ext_boost INTERFACE)
 target_include_directories(nsb_ext_boost INTERFACE ${Boost_INCLUDE_DIRS})

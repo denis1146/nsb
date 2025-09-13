@@ -1,103 +1,134 @@
 #!/usr/bin/env bash
 
+isLinux=true
 basePath=$(pwd)
 targetLibs="${basePath}/.."
 tmpPath="${basePath}/tmp"
-isLinux=true
+
 if $isLinux;
 then
-  threads=$(lscpu | grep -i "cpu(s):" | head -n 1 | tr " " "\n" | tail -n 1)
+  threads=$(nproc 2>/dev/null \
+            || echo 16 \
+  )
+  echo "CPU(s): ${threads}"
+  buildOptions=" -j ${threads} "
 else
-  threads=16
-fi
-echo "CPU(s): ${threads}"
-
-# Boost
-boost_1_88_0="boost_1_88_0"
-boostPath="${tmpPath}/${boost_1_88_0}"
-
-# Download
-if test -d "${boostPath}";
-then 
-  echo "Found a catalog with ${boost_1_88_0} (${boostPath})"
-else
-  rm -rf "${boostPath}"
-  mkdir -p "${boostPath}"
-  git clone https://github.com/boostorg/boost.git -b boost-1.88.0 --depth 1 "${boostPath}"
-  cd "${boostPath}"
-  git submodule update --depth 1 --init --recursive
+  buildOptions=" -maxCpuCount "
 fi
 
-# Build
-cd "${boostPath}"
-if test -d "${boostPath}/_build";
-then 
-  echo "Found catalog with ${boost_1_88_0} build location (${boostPath}/_build)"
-else
-  mkdir _build
-  cd _build
-  cmake ..
-  if $isLinux;
+#####     Functions     ######
+# gitClone(repo, branch, targetPath, force=0)
+function gitClone {
+  echo "gitClone( $@ ) [$#]"
+  if [ $# -ne 3 ] && [ $# -ne 4 ]
   then
-    cmake --build . -- -j $threads
-  else
-    cmake --build . --config Debug -- -maxCpuCount
-    cmake --build . --config Release -- -maxCpuCount
+    echo "Error: Incorrect number of arguments passed to function ${0}" >&2
+    return 1
   fi
-fi
 
-# Installatio
-cd "${boostPath}/_build"
-if $isLinux;
-then
-  cmake --install . --prefix "${targetLibs}/${boost_1_88_0}"
-else
-  cmake --install . --config Debug --prefix "${targetLibs}/${boost_1_88_0}/Debug"
-  cmake --install . --config Release --prefix "${targetLibs}/${boost_1_88_0}/Release"
-fi
-# ~Boost
+  local repo=$1
+  local branch=$2
+  local targetPath="${3}"
+  local force=$4
+  local currentPath=$(pwd)
+
+  if [ $force -eq "1" ]
+  then 
+    rm -rf "${targetPath}"
+  fi
+
+  if test -d "${targetPath}";
+  then 
+    echo "Found a catalog with ${targetPath}"
+    return 0
+  fi
+
+  mkdir -p "${targetPath}"
+  git clone "${repo}" -b "${branch}" --depth 1 "${targetPath}"
+  cd "${targetPath}"
+  git submodule update --depth 1 --init --recursive
+  cd "${currentPath}"
+  return 0
+}
+
+# buildProject(projectPath, buildCatalog, force=0)
+function buildProject {
+  echo "buildProject( $@ ) [$#]"
+  if [ $# -ne 2 ] && [ $# -ne 3 ]
+  then
+    echo "Error: Incorrect number of arguments passed to function ${0}" >&2
+    return 1
+  fi
+
+  local projectPath="${1}"
+  local buildCatalog="${2}"
+  local force=$3
+  local buildPath="${projectPath}/${buildCatalog}"
+  local currentPath=$(pwd)
+
+  if [ $force -eq "1" ]
+  then 
+    rm -rf "${buildPath}"
+  fi
+
+  if test -d "${buildPath}";
+  then 
+    echo "Found a catalog with ${buildPath}"
+    return 0
+  fi
+
+  mkdir -p "${buildPath}"
+  cd "${buildPath}"
+
+  cmake -S ../ -B ./debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEBUG_POSTFIX=d
+  cmake -S ../ -B ./release -DCMAKE_BUILD_TYPE=Release
+  cmake --build ./debug --config Debug -- $buildOptions
+  cmake --build ./release --config Release -- $buildOptions
+  cd "${currentPath}"
+  return 0
+}
+
+# installProject(projectBuildPath, installPath, force=0)
+function installProject {
+  echo "installProject( $@ ) [$#]"
+  if [ $# -ne 2 ] && [ $# -ne 3 ]
+  then
+    echo "Error: Incorrect number of arguments passed to function ${0}" >&2
+    return 1
+  fi
+
+  local projectBuildPath="${1}"
+  local installPath="${2}"
+  local force=$3
+
+  if [ $force -eq "1" ]
+  then 
+    rm -rf "${installPath}"
+  fi
+
+  if test -d "${installPath}";
+  then 
+    echo "Found a catalog with ${installPath}"
+    return 0
+  fi
+
+  echo "${installPath}"
+  cmake --install "${projectBuildPath}/debug" --config Debug --prefix "${installPath}"
+  cmake --install "${projectBuildPath}/release" --config Release --prefix "${installPath}"
+  return 0
+}
+#####     ~Functions     #####
 
 # GTest
 gtest_1_17_0="gtest_1_17_0"
 gtestPath="${tmpPath}/${gtest_1_17_0}"
+gitClone "https://github.com/google/googletest.git" "v1.17.0" "${gtestPath}"
+buildProject "${gtestPath}" "_build"
+installProject "${gtestPath}/_build" "${targetLibs}/${gtest_1_17_0}"
 
-# Download
-if test -d "${gtestPath}";
-then 
-  echo "Found a catalog with ${gtest_1_17_0} (${gtestPath})"
-else
-  rm -rf "${gtestPath}"
-  mkdir -p "${gtestPath}"
-  git clone https://github.com/google/googletest.git -b v1.17.0 --depth 1 "${gtestPath}"
-  cd "${gtestPath}"
-  git submodule update --depth 1 --init --recursive
-fi
-
-# Build
-cd "${gtestPath}"
-if test -d "${gtestPath}/_build";
-then 
-  echo "Found catalog with ${gtest_1_17_0} build location (${gtestPath}/_build)"
-else
-  mkdir _build
-  cd _build
-  cmake ..
-  if $isLinux;
-  then
-    cmake --build . -- -j $threads
-  else
-    cmake --build . --config Debug -- -maxCpuCount
-    cmake --build . --config Release -- -maxCpuCount
-  fi
-fi
-
-# Installation
-cd "${gtestPath}/_build"
-if $isLinux;
-then
-  cmake --install . --prefix "${targetLibs}/${gtest_1_17_0}"
-else
-  cmake --install . --config Debug --prefix "${targetLibs}/${gtest_1_17_0}/Debug"
-  cmake --install . --config Release --prefix "${targetLibs}/${gtest_1_17_0}/Release"
-fi
-# ~GTest
+# Boost
+boost_1_88_0="boost_1_88_0"
+boostPath="${tmpPath}/${boost_1_88_0}"
+gitClone "https://github.com/boostorg/boost.git" "boost-1.88.0" "${boostPath}"
+buildProject "${boostPath}" "_build"
+installProject "${boostPath}/_build" "${targetLibs}/${boost_1_88_0}"
