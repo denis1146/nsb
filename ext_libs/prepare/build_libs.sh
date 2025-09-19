@@ -1,11 +1,23 @@
 #!/usr/bin/env bash
 
-isLinux=true
+windows="windows"
+linux="linux"
+
+if [ $# -ne 1 ] || [ $1 != $linux ] && [ $1 != $windows ];
+then
+  echo "Error: Please pass the operating system name. Use <$linux> or <$windows> as a parameter." >&2
+  echo "usage: $0 $linux" >&2
+  echo "or" >&2
+  echo "usage: $0 $windows" >&2
+
+  exit 1
+fi
+
 basePath=$(pwd)
 targetLibs="${basePath}/.."
 tmpPath="${basePath}/tmp"
 
-if $isLinux;
+if [ $1 == $linux ];
 then
   threads=$(nproc 2>/dev/null \
             || echo 16 \
