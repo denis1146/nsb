@@ -1,9 +1,10 @@
 
 #include <iostream>
 
-#include "Pimpl/Pimpl.h"
-#include "Factory/Factory.h"
 #include "Boost/ProgramOptions/ProgramOptions.h"
+#include "Factory/Factory.h"
+#include "Pimpl/Pimpl.h"
+#include "SimpleAny/SimpleAny.h"
 
 int main(int /* argc */, char* /* argv */[])
 {
@@ -26,6 +27,10 @@ int main(int /* argc */, char* /* argv */[])
   ProgramOptions::run();
   std::cout << boostSt << std::endl;
   // Boost =============================
+
+  // SimpleAny =========================
+  SimpleAny::run();
+  // SimpleAny =========================
 
   return 0;
 }

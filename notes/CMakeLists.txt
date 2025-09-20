@@ -8,6 +8,8 @@ STATIC
   Factory/Factory.cpp
   Pimpl/Pimpl.h
   Pimpl/Pimpl.cpp
+  SimpleAny/SimpleAny.h
+  SimpleAny/SimpleAny.cpp
 )
 
 target_link_libraries(notes_lib
