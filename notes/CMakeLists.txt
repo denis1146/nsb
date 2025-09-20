@@ -10,6 +10,8 @@ STATIC
   Pimpl/Pimpl.cpp
   SimpleAny/SimpleAny.h
   SimpleAny/SimpleAny.cpp
+  Ranges/RangesTest.h
+  Ranges/RangesTest.cpp
 )
 
 target_link_libraries(notes_lib

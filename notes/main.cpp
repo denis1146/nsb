@@ -4,6 +4,7 @@
 #include "Boost/ProgramOptions/ProgramOptions.h"
 #include "Factory/Factory.h"
 #include "Pimpl/Pimpl.h"
+#include "Ranges/RangesTest.h"
 #include "SimpleAny/SimpleAny.h"
 
 int main(int /* argc */, char* /* argv */[])
@@ -31,6 +32,10 @@ int main(int /* argc */, char* /* argv */[])
   // SimpleAny =========================
   SimpleAny::run();
   // SimpleAny =========================
+
+  // Ranges ============================
+  RangesTest::run();
+  // Ranges ============================
 
   return 0;
 }
