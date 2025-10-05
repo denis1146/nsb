@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include "Boost/ProgramOptions/ProgramOptions.h"
+#include "Boost/Boost.h"
 #include "Factory/Factory.h"
 #include "Pimpl/Pimpl.h"
 #include "Ranges/RangesTest.h"
@@ -25,10 +25,7 @@ int main(int /* argc */, char* /* argv */[])
   std::cout << getFooFactory()->show() << std::endl;
 
   // Boost =============================
-  const auto boostSt = std::string(20, '=') + " Boost " + std::string(20, '=');
-  std::cout << boostSt << std::endl;
-  ProgramOptions::run();
-  std::cout << boostSt << std::endl;
+  Boost::run();
 
   // SimpleAny =========================
   SimpleAny::run();

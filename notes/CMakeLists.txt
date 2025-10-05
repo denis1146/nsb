@@ -2,6 +2,10 @@ project(notes VERSION 0.0.1)
 
 add_library(notes_lib
 STATIC
+  Boost/Boost.h
+  Boost/Boost.cpp
+  Boost/Spirit/Spirit.h
+  Boost/Spirit/Spirit.cpp
   Boost/ProgramOptions/ProgramOptions.h
   Boost/ProgramOptions/ProgramOptions.cpp
   Factory/Factory.h

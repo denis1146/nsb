@@ -22,7 +22,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
 void ProgramOptions::run()
 {
   std::cout << std::string(16, '=') + " ProgramOptions " + std::string(16, '=') << std::endl;
-  // return;
+  return;
 
   namespace po = boost::program_options;
   using StringList = std::vector<std::string>;
