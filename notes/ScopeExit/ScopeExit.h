@@ -5,5 +5,6 @@ public:
   void run();
 
 private:
-  const char* const m_se = "=================== ScopeExit ===================";
+  const char* const m_se =
+    "================== ScopeExit ==================";
 };

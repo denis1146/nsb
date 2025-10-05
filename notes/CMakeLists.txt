@@ -14,6 +14,8 @@ STATIC
   Ranges/RangesTest.cpp
   ScopeExit/ScopeExit.h
   ScopeExit/ScopeExit.cpp
+  Transformations/Transformations.h
+  Transformations/Transformations.cpp
 )
 
 target_link_libraries(notes_lib

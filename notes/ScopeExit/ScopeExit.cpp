@@ -27,6 +27,7 @@ void ScopeExit::run() {
     std::puts(st.data());
   };
   show(m_se);
+  return;
   BOOST_SCOPE_EXIT(&show, this_) {
     show(this_->m_se);
   } BOOST_SCOPE_EXIT_END;

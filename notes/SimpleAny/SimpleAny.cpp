@@ -52,8 +52,9 @@ struct Any {
 
 void SimpleAny::run()
 {
-  auto show = [] { std::cout << std::string(19, '=') + " SimpleAny " + std::string(19, '=') << std::endl; };
+  auto show = [] { std::cout << std::string(18, '=') + " SimpleAny " + std::string(18, '=') << std::endl; };
   show();
+  return;
 
   Any any = std::string("123");
   auto& st = any.get<std::string>();

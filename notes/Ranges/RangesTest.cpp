@@ -8,8 +8,9 @@
 
 void RangesTest::run()
 {
-  auto show = [] { std::cout << std::string(19, '=') + " RangesTest " + std::string(19, '=') << std::endl; };
+  auto show = [] { std::cout << std::string(18, '=') + " RangesTest " + std::string(18, '=') << std::endl; };
   show();
+  return;
 
   std::vector<int> v{ 1,2,3,4,5,6,7,8,9 };
   auto numbers = v | std::views::filter([](int n) { return n % 2 == 0; })
