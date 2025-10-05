@@ -6,6 +6,7 @@
 #include "Pimpl/Pimpl.h"
 #include "Ranges/RangesTest.h"
 #include "SimpleAny/SimpleAny.h"
+#include "ScopeExit/ScopeExit.h"
 
 int main(int /* argc */, char* /* argv */[])
 {
@@ -23,19 +24,19 @@ int main(int /* argc */, char* /* argv */[])
   std::cout << getFooFactory()->show() << std::endl;
 
   // Boost =============================
-  auto boostSt = std::string(20, '=') + " Boost " + std::string(20, '=');
+  const auto boostSt = std::string(20, '=') + " Boost " + std::string(20, '=');
   std::cout << boostSt << std::endl;
   ProgramOptions::run();
   std::cout << boostSt << std::endl;
-  // Boost =============================
 
   // SimpleAny =========================
   SimpleAny::run();
-  // SimpleAny =========================
 
   // Ranges ============================
   RangesTest::run();
-  // Ranges ============================
+
+  // ScopeExit =========================
+  ScopeExit{}.run();
 
   return 0;
 }
