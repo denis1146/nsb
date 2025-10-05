@@ -7,6 +7,7 @@
 #include "Ranges/RangesTest.h"
 #include "SimpleAny/SimpleAny.h"
 #include "ScopeExit/ScopeExit.h"
+#include "Transformations/Transformations.h"
 
 int main(int /* argc */, char* /* argv */[])
 {
@@ -37,6 +38,9 @@ int main(int /* argc */, char* /* argv */[])
 
   // ScopeExit =========================
   ScopeExit{}.run();
+
+  // Transformations ==================
+  Transformations::run();
 
   return 0;
 }
