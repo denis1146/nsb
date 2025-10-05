@@ -12,6 +12,8 @@ STATIC
   SimpleAny/SimpleAny.cpp
   Ranges/RangesTest.h
   Ranges/RangesTest.cpp
+  ScopeExit/ScopeExit.h
+  ScopeExit/ScopeExit.cpp
 )
 
 target_link_libraries(notes_lib
