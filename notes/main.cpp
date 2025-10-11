@@ -8,6 +8,7 @@
 #include "SimpleAny/SimpleAny.h"
 #include "ScopeExit/ScopeExit.h"
 #include "Transformations/Transformations.h"
+#include "TemplateTest/TemplateTest.h"
 
 int main(int /* argc */, char* /* argv */[])
 {
@@ -38,6 +39,9 @@ int main(int /* argc */, char* /* argv */[])
 
   // Transformations ==================
   Transformations::run();
+
+  // TemplateTest ==================
+  TemplateTest::run();
 
   return 0;
 }
