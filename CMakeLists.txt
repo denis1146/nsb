@@ -19,9 +19,6 @@ target_compile_options(nsb_compile_options_for_dev INTERFACE
 
 add_library(nsb_standard_flags INTERFACE)
 target_compile_features(nsb_standard_flags INTERFACE cxx_std_23)
-#set(CMAKE_CXX_STANDARD 20)
-#set(CMAKE_CXX_STANDARD_REQUIRED True)
-# set_property(TARGET app CXX_STANDARD 23)
 
 if ((${CMAKE_SYSTEM_NAME} MATCHES "Windows") AND (MSVC))
   set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "notes")

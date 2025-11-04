@@ -12,12 +12,14 @@ STATIC
   Factory/Factory.cpp
   Pimpl/Pimpl.h
   Pimpl/Pimpl.cpp
-  SimpleAny/SimpleAny.h
-  SimpleAny/SimpleAny.cpp
   Ranges/RangesTest.h
   Ranges/RangesTest.cpp
   ScopeExit/ScopeExit.h
   ScopeExit/ScopeExit.cpp
+  SimpleAny/SimpleAny.h
+  SimpleAny/SimpleAny.cpp
+  TemplateTest/TemplateTest.h
+  TemplateTest/TemplateTest.cpp
   Transformations/Transformations.h
   Transformations/Transformations.cpp
 )
