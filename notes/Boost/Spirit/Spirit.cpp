@@ -5,6 +5,9 @@
 
 #include <boost/spirit/include/qi.hpp>
 #include <boost/phoenix.hpp>
+#include <boost/scope_exit.hpp>
+
+#include "NoteHelpers.h"
 
 namespace 
 {
@@ -176,9 +179,10 @@ DataTime parseDataTime(std::string_view s)
 
 void Spirit::run()
 {
-  auto show = [] { std::cout << std::string(20, '=') + " Spirit " + std::string(20, '=') << std::endl; };
-  show();
+  constexpr char noteTitle[] = "Spirit";
+  nsb::showNoteTitle(noteTitle);
   return;
+  BOOST_SCOPE_EXIT(&noteTitle) { nsb::showNoteTitle(noteTitle); } BOOST_SCOPE_EXIT_END;
 
   try {
     auto d = parseData("1.01.1970");
@@ -208,6 +212,4 @@ void Spirit::run()
   catch(const std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;
   }
-
-  show();
 }

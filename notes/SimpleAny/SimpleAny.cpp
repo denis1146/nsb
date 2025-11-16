@@ -3,6 +3,9 @@
 #include <memory>
 #include <type_traits>
 #include <iostream>
+#include <boost/scope_exit.hpp>
+
+#include "NoteHelpers.h"
 
 namespace {
 
@@ -52,9 +55,10 @@ struct Any {
 
 void SimpleAny::run()
 {
-  auto show = [] { std::cout << std::string(18, '=') + " SimpleAny " + std::string(18, '=') << std::endl; };
-  show();
+  constexpr char noteTitle[] = "SimpleAny";
+  nsb::showNoteTitle(noteTitle);
   return;
+  BOOST_SCOPE_EXIT(&noteTitle) { nsb::showNoteTitle(noteTitle); } BOOST_SCOPE_EXIT_END;
 
   Any any = std::string("123");
   auto& st = any.get<std::string>();
@@ -83,6 +87,4 @@ void SimpleAny::run()
 
   a1 = a4;
   a1 = std::move(a2);
-
-  show();
 }

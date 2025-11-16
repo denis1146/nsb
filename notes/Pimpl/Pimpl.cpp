@@ -4,8 +4,8 @@
 
 struct Pimpl::Impl
 {
-  std::string st = std::string(20, '=') + " Pimpl " +
-                   std::string(20, '=');
+  std::string st = std::string(21, '=') + " Pimpl " +
+                   std::string(21, '=');
 };
 
 Pimpl::Pimpl()

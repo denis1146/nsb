@@ -12,6 +12,8 @@
 #include <boost/pointer_cast.hpp>
 #include <boost/polymorphic_pointer_cast.hpp>
 
+#include "NoteHelpers.h"
+
 namespace
 {
 
@@ -167,11 +169,10 @@ void polymorphic()
 
 void Transformations::run() 
 {
-  auto show = [] { std::cout << std::string(15, '=') + " Transformations " + std::string(15, '=') << std::endl; };
-  show();
+  constexpr char noteTitle[] = "Transformations";
+  nsb::showNoteTitle(noteTitle);
   return;
-
-  BOOST_SCOPE_EXIT(&show) { show(); } BOOST_SCOPE_EXIT_END;
+  BOOST_SCOPE_EXIT(&noteTitle) { nsb::showNoteTitle(noteTitle); } BOOST_SCOPE_EXIT_END;
 
   // String to a number
   {

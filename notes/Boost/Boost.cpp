@@ -1,19 +1,18 @@
 #include "Boost.h"
 
-#include <iostream>
+#include <boost/scope_exit.hpp>
 
+#include "NoteHelpers.h"
 #include "ProgramOptions/ProgramOptions.h"
 #include "Spirit/Spirit.h"
 
-
 void Boost::run()
 {
-  auto show = [] { std::cout << std::string(17, '=') + " ~~~ Boost ~~~ " + std::string(17, '=') << std::endl; };
-  show();
+  constexpr char noteTitle[] = "~~~ Boost ~~~";
+  nsb::showNoteTitle(noteTitle);
   // return;
+  BOOST_SCOPE_EXIT(&noteTitle) { nsb::showNoteTitle(noteTitle); } BOOST_SCOPE_EXIT_END;
 
   ProgramOptions::run();
   Spirit::run();
-
-  show();
 }

@@ -9,21 +9,21 @@ namespace {
 
 struct WindowsFactory: IFooFactory {
   std::string show() override {
-    auto st = std::string(16, '=');
+    auto st = std::string(17, '=');
     return st + " WindowsFactory " + st;
   };
 };
 
 struct LinuxFactory: IFooFactory {
   std::string show() override {
-    auto st = std::string(17, '=');
+    auto st = std::string(18, '=');
     return st + " LinuxFactory " + st;
   };
 };
 
 struct MacOsFactory: IFooFactory {
   std::string show() override {
-    auto st = std::string(17, '=');
+    auto st = std::string(18, '=');
     return st + " MacOsFactory " + st;
   };
 };

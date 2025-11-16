@@ -22,6 +22,9 @@ STATIC
   TemplateTest/TemplateTest.cpp
   Transformations/Transformations.h
   Transformations/Transformations.cpp
+  FindAndReplace/FindAndReplace.h
+  FindAndReplace/FindAndReplace.cpp
+  NoteHelpers.h
 )
 
 target_link_libraries(notes_lib
@@ -34,6 +37,7 @@ PRIVATE
 
 target_include_directories(notes_lib
 PRIVATE
+  ./
   ${CMAKE_SOURCE_DIR}/libs/
 )
 

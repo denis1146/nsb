@@ -5,6 +5,9 @@
 #include <fstream>
 #include <boost/program_options.hpp>
 #include <boost/algorithm/string/join.hpp>
+#include <boost/scope_exit.hpp>
+
+#include "NoteHelpers.h"
 
 namespace {
 
@@ -21,8 +24,10 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
 
 void ProgramOptions::run()
 {
-  std::cout << std::string(16, '=') + " ProgramOptions " + std::string(16, '=') << std::endl;
+  constexpr char noteTitle[] = "ProgramOptions";
+  nsb::showNoteTitle(noteTitle);
   return;
+  BOOST_SCOPE_EXIT(&noteTitle) { nsb::showNoteTitle(noteTitle); } BOOST_SCOPE_EXIT_END;
 
   namespace po = boost::program_options;
   using StringList = std::vector<std::string>;

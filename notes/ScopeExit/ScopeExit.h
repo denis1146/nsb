@@ -6,5 +6,5 @@ public:
 
 private:
   const char* const m_se =
-    "================== ScopeExit ==================";
+    "=================== ScopeExit ====================";
 };

@@ -5,12 +5,16 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+#include <boost/scope_exit.hpp>
+
+#include "NoteHelpers.h"
 
 void RangesTest::run()
 {
-  auto show = [] { std::cout << std::string(18, '=') + " RangesTest " + std::string(18, '=') << std::endl; };
-  show();
+  constexpr char noteTitle[] = "RangesTest";
+  nsb::showNoteTitle(noteTitle);
   return;
+  BOOST_SCOPE_EXIT(&noteTitle) { nsb::showNoteTitle(noteTitle); } BOOST_SCOPE_EXIT_END;
 
   std::vector<int> v{ 1,2,3,4,5,6,7,8,9 };
   auto numbers = v | std::views::filter([](int n) { return n % 2 == 0; })
@@ -42,6 +46,4 @@ void RangesTest::run()
   std::ranges::sort(view2);
   std::ranges::copy(view2.begin(), view2.end(), std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
-
-  show();
 }

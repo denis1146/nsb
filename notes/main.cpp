@@ -9,6 +9,7 @@
 #include "ScopeExit/ScopeExit.h"
 #include "Transformations/Transformations.h"
 #include "TemplateTest/TemplateTest.h"
+#include "FindAndReplace/FindAndReplace.h"
 
 int main(int /* argc */, char* /* argv */[])
 {
@@ -42,6 +43,9 @@ int main(int /* argc */, char* /* argv */[])
 
   // TemplateTest ==================
   TemplateTest::run();
+
+  // FindAndReplace ==================
+  FindAndReplace::run();
 
   return 0;
 }

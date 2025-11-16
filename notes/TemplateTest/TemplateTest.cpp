@@ -12,6 +12,9 @@
 #include <boost/type_traits/has_post_increment.hpp>
 #include <boost/type_traits/has_plus.hpp>
 #include <boost/type_traits/has_plus_assign.hpp>
+#include <boost/scope_exit.hpp>
+
+#include "NoteHelpers.h"
 
 namespace
 {
@@ -135,9 +138,10 @@ void inc(T& v) {
 
 void TemplateTest::run()
 {
-  auto show = [] { std::cout << std::string(17, '=') + " TemplateTest " + std::string(17, '=') << std::endl; };
-  show();
+  constexpr char noteTitle[] = "TemplateTest";
+  nsb::showNoteTitle(noteTitle);
   return;
+  BOOST_SCOPE_EXIT(&noteTitle) { nsb::showNoteTitle(noteTitle); } BOOST_SCOPE_EXIT_END;
 
   // === 1
   int nonConst = 42;
@@ -169,7 +173,5 @@ void TemplateTest::run()
   int inc_v = 41;
   inc(inc_v);
   std::cout << "6. Has_Increment     : " << inc_v << std::endl;
-
-  show();
 }
 
