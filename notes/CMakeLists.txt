@@ -2,6 +2,8 @@ project(notes VERSION 0.0.1)
 
 add_library(notes_lib
 STATIC
+  CountingInString/CountingInString.h
+  CountingInString/CountingInString.cpp
   Boost/Boost.h
   Boost/Boost.cpp
   Boost/Spirit/Spirit.h

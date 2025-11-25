@@ -10,6 +10,7 @@
 #include "Transformations/Transformations.h"
 #include "TemplateTest/TemplateTest.h"
 #include "FindAndReplace/FindAndReplace.h"
+#include "CountingInString/CountingInString.h"
 
 int main(int /* argc */, char* /* argv */[])
 {
@@ -38,14 +39,17 @@ int main(int /* argc */, char* /* argv */[])
   // ScopeExit =========================
   ScopeExit{}.run();
 
-  // Transformations ==================
+  // Transformations ===================
   Transformations::run();
 
-  // TemplateTest ==================
+  // TemplateTest ======================
   TemplateTest::run();
 
-  // FindAndReplace ==================
+  // FindAndReplace ====================
   FindAndReplace::run();
+
+  // CountingInString ==================
+  CountingInString::run();
 
   return 0;
 }
