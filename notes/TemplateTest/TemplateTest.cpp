@@ -14,6 +14,9 @@
 #include <boost/type_traits/has_plus_assign.hpp>
 #include <boost/scope_exit.hpp>
 
+#include <boost/mpl/apply.hpp>
+#include <boost/mpl/eval_if.hpp>
+
 #include "NoteHelpers.h"
 
 namespace
@@ -134,7 +137,86 @@ void inc(T& v) {
   // //   static_assert(false);
 }
 
+// === 7
+// Getting the result of a function
+
+  struct s1{};
+  struct s2{};
+  struct s3{};
+
+  inline s3 operator+(const s1&, const s2&) {
+    return s3();
+  }
+  inline s3 operator+(const s2&, const s1&) {
+    return s3();
+  }
+
+  namespace result_of {
+
+  template<class T1, class T2>
+  struct res_of_cpp03 {
+    typedef typename std::common_type<T1, T2>::type type;
+  };
+
+  template<>
+  struct res_of_cpp03<s1, s2> {
+    typedef s3 type;
+  };
+
+  template<>
+  struct res_of_cpp03<s2, s1> {
+    typedef s3 type;
+  };
+
+  }
+
+  template<class T1, class T2>
+  typename result_of::res_of_cpp03<T1, T2>::type
+  my_add_cpp03(const T1& v1, const T2& v2) {
+    return v1 + v2;
+  }
+
+  template<class T1, class T2>
+  auto
+  my_add_cpp11(const T1& v1, const T2& v2) -> decltype(v1 + v2) {
+    return v1 + v2;
+  }
+
+// === 8
+// Lazy evaluation of metafunctions
+  template<class T>
+  struct identity_t{
+    using type = T;
+  };
+
+  struct fallback_t;
+
+  template<class Cond, class Param, class Func, class Fallback = fallback_t>
+  struct apply_if;
+
+  template<class Cond, class Param, class Func, class Fallback>
+  struct apply_if {
+    using condition_t = boost::mpl::apply<Cond, Param>::type;
+    using applied_t   = boost::mpl::apply<Func, Param>;
+
+    using type = typename boost::mpl::
+      eval_if_c<condition_t::value, applied_t, identity_t<Fallback>>::type;
+  };
+
+  void lazyEval() {
+    using boost::mpl::_1;
+    using boost::mpl::_2;
+
+    using res1_t = apply_if<std::is_integral<_1>, int, std::make_unsigned<_1>>::type;
+    static_assert(std::is_same_v<res1_t, unsigned int>);
+    
+    using res2_t = apply_if<std::is_integral<_1>, float, std::make_unsigned<_1>>::type;
+    static_assert(std::is_same_v<res2_t, fallback_t>);
+  }
+
 }
+
+
 
 void TemplateTest::run()
 {
@@ -173,5 +255,22 @@ void TemplateTest::run()
   int inc_v = 41;
   inc(inc_v);
   std::cout << "6. Has_Increment     : " << inc_v << std::endl;
-}
 
+  // === 7
+  // Getting the result of a function
+  std::cout << "7. Getting the result of a function.\t";
+  s1 v1;
+  s2 v2;
+  [[maybe_unused]] s3 v31_cpp03 = my_add_cpp03(v1, v2);
+  [[maybe_unused]] s3 v32_cpp03 = my_add_cpp03(v2, v1);
+  std::cout << my_add_cpp03('\5', 2) << "\t";
+
+  [[maybe_unused]] s3 v31 = my_add_cpp11(v1, v2);
+  [[maybe_unused]] s3 v32 = my_add_cpp11(v2, v1);
+  std::cout << my_add_cpp11('\5', 2) << "\t";
+  std::cout << my_add_cpp11(std::string{"4"}, "2") << std::endl;
+
+  // === 8
+  // Lazy evaluation of metafunctions
+  lazyEval();
+}
