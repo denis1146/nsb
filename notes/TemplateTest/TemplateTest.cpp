@@ -13,7 +13,6 @@
 #include <boost/type_traits/has_plus.hpp>
 #include <boost/type_traits/has_plus_assign.hpp>
 #include <boost/scope_exit.hpp>
-
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/eval_if.hpp>
 
@@ -213,7 +212,6 @@ void inc(T& v) {
     using res2_t = apply_if<std::is_integral<_1>, float, std::make_unsigned<_1>>::type;
     static_assert(std::is_same_v<res2_t, fallback_t>);
   }
-
 }
 
 
@@ -272,5 +270,6 @@ void TemplateTest::run()
 
   // === 8
   // Lazy evaluation of metafunctions
+  std::cout << "8. Lazy evaluation of metafunctions" << std::endl;
   lazyEval();
 }

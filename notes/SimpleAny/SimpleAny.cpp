@@ -3,6 +3,9 @@
 #include <memory>
 #include <type_traits>
 #include <iostream>
+#include <typeindex>
+#include <string_view>
+#include <source_location>
 #include <boost/scope_exit.hpp>
 
 #include "NoteHelpers.h"
@@ -51,6 +54,46 @@ struct Any {
   std::unique_ptr<placeholder> m_up;
 };
 
+
+  // === 1
+  // Bypassing RTTI Disabling
+
+  // RTTI enabled
+  template<class T>
+  std::type_index type_id_rtti_enabled() {
+    return typeid(T);
+  }
+
+  // RTTI disabled
+  struct my_type_index {
+    explicit my_type_index(std::string_view name) noexcept : m_name{name} {}
+    std::string_view name() const noexcept { return m_name; }
+    std::string_view m_name;
+  };
+
+  inline bool operator==(const my_type_index& lhs, const my_type_index& rhs) {
+    return lhs.name() == rhs.name();
+  }
+
+  inline bool operator!=(const my_type_index& lhs, const my_type_index& rhs) {
+    return !(lhs == rhs);
+  }
+
+  template<class T>
+  inline my_type_index type_id_rtti_disabled() {
+    return my_type_index{ std::source_location::current().function_name() };
+  }
+
+  void disablingRTTI() {
+    std::cout << std::endl;
+    std::cout << "1. Bypassing RTTI Disabling" << std::endl;
+
+    assert(type_id_rtti_enabled<int>() == type_id_rtti_enabled<int>());
+    assert(type_id_rtti_enabled<int>() != type_id_rtti_enabled<unsigned int>());
+
+    assert(type_id_rtti_disabled<int>() == type_id_rtti_disabled<int>());
+    assert(type_id_rtti_disabled<int>() != type_id_rtti_disabled<unsigned int>());
+  }
 }
 
 void SimpleAny::run()
@@ -87,4 +130,7 @@ void SimpleAny::run()
 
   a1 = a4;
   a1 = std::move(a2);
+  
+  // Bypassing RTTI Disabling
+  disablingRTTI();
 }
