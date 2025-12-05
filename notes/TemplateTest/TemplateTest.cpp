@@ -15,6 +15,7 @@
 #include <boost/scope_exit.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/eval_if.hpp>
+#include <boost/container_hash/hash.hpp>
 
 #include "NoteHelpers.h"
 
@@ -212,8 +213,29 @@ void inc(T& v) {
     using res2_t = apply_if<std::is_integral<_1>, float, std::make_unsigned<_1>>::type;
     static_assert(std::is_same_v<res2_t, fallback_t>);
   }
+
+  // === 9
+  // Hash function
+  template<class T>
+  inline void hash_combine(std::size_t& seed, const T& v) noexcept
+  {
+    std::hash<T> hasher;
+    seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+  }
 }
 
+class TypeForHash{};
+template<>
+struct std::hash<TypeForHash>
+{
+    std::size_t operator()(const TypeForHash& s) const noexcept 
+    {
+        std::size_t h1 = std::hash<std::string_view>{}("42");
+        std::size_t h2 = std::hash<int>{}(sizeof(s));
+        boost::hash_combine(h1, h2);
+        return h1 ^ (h2 << 4);
+    }
+};
 
 
 void TemplateTest::run()
@@ -272,4 +294,15 @@ void TemplateTest::run()
   // Lazy evaluation of metafunctions
   std::cout << "8. Lazy evaluation of metafunctions" << std::endl;
   lazyEval();
+
+  // === 9
+  // Hash function
+  std::cout << "9. Hash function";
+  int h1 = 42;
+  float h2 = 3.14f;
+  std::size_t seed = 0;
+  hash_combine(seed, h1);
+  hash_combine(seed, h2);
+  hash_combine(seed, TypeForHash{});
+  std::cout << "     : Hash: " << seed << std::endl;
 }
