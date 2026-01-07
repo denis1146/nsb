@@ -6,6 +6,23 @@ STATIC
   CountingInString/CountingInString.cpp
   Boost/Boost.h
   Boost/Boost.cpp
+  Boost/Asio/Asio.h
+  Boost/Asio/Asio.cpp
+  Boost/Asio/Daytime.h
+  Boost/Asio/Timers/Timers.h
+  Boost/Asio/Timers/Timers.cpp
+  Boost/Asio/Tcp/SyncDaytimeClientTcp.h
+  Boost/Asio/Tcp/SyncDaytimeClientTcp.cpp
+  Boost/Asio/Tcp/SyncDaytimeServerTcp.h
+  Boost/Asio/Tcp/SyncDaytimeServerTcp.cpp
+  Boost/Asio/Tcp/AsyncDaytimeServerTcp.h
+  Boost/Asio/Tcp/AsyncDaytimeServerTcp.cpp
+  Boost/Asio/Udp/SyncDaytimeClientUdp.h
+  Boost/Asio/Udp/SyncDaytimeClientUdp.cpp
+  Boost/Asio/Udp/SyncDaytimeServerUdp.h
+  Boost/Asio/Udp/SyncDaytimeServerUdp.cpp
+  Boost/Asio/Udp/AsyncDaytimeServerUdp.h
+  Boost/Asio/Udp/AsyncDaytimeServerUdp.cpp
   Boost/Spirit/Spirit.h
   Boost/Spirit/Spirit.cpp
   Boost/ProgramOptions/ProgramOptions.h

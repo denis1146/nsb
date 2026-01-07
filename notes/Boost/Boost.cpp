@@ -5,6 +5,7 @@
 #include "NoteHelpers.h"
 #include "ProgramOptions/ProgramOptions.h"
 #include "Spirit/Spirit.h"
+#include "Asio/Asio.h"
 
 void Boost::run()
 {
@@ -15,4 +16,5 @@ void Boost::run()
 
   ProgramOptions::run();
   Spirit::run();
+  Asio::run();
 }
