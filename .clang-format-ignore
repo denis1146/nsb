@@ -1,0 +1,5 @@
+.git/**
+.vscode/**
+build*/**
+_build*/**
+ext_libs/**
