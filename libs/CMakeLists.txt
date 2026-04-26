@@ -10,6 +10,9 @@ add_library(libs STATIC
   NsbVector/NsbVector.cpp
   numeric/reduce.h
   numeric/reduce.hpp
+  TaskManager/TaskManager.hpp
+  TaskManager/TaskManagerAsio.hpp
+  TaskManager/TaskManagerAsio.cpp
   predef.h
   type_traits.h
   utility.h
@@ -19,6 +22,7 @@ PRIVATE
   nsb_standard_flags
   nsb_compile_options
   # nsb_compile_options_for_dev
+  nsb_ext_boost
 )
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 target_link_libraries(libs
@@ -37,6 +41,7 @@ add_executable(libs_testing
   "libs_testing/containers/Array_test.cpp"
   "libs_testing/containers/iterator_test.cpp"
   "libs_testing/numeric/reduce_test.cpp"
+  "libs_testing/TaskManager/TaskManagerAsio_test.cpp"
   "libs_testing/main.cpp"
   "libs_testing/predef_test.cpp"
   "libs_testing/type_traits_test.cpp"
@@ -54,7 +59,6 @@ PRIVATE
   nsb_compile_options
   # nsb_compile_options_for_dev
   nsb_ext_gtest
-  nsb_ext_boost
   libs
 )
 
