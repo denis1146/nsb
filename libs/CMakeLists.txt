@@ -10,6 +10,7 @@ add_library(libs STATIC
   NsbVector/NsbVector.cpp
   numeric/reduce.h
   numeric/reduce.hpp
+  StateMachine/StateMachine.hpp
   TaskManager/TaskManager.hpp
   TaskManager/TaskManagerAsio.hpp
   TaskManager/TaskManagerAsio.cpp
@@ -41,6 +42,7 @@ add_executable(libs_testing
   "libs_testing/containers/Array_test.cpp"
   "libs_testing/containers/iterator_test.cpp"
   "libs_testing/numeric/reduce_test.cpp"
+  "libs_testing/StateMachine/StateMachine_test.cpp"
   "libs_testing/TaskManager/TaskManagerAsio_test.cpp"
   "libs_testing/main.cpp"
   "libs_testing/predef_test.cpp"
