@@ -1,11 +1,11 @@
 #include "Spirit.h"
 
-#include <iostream>
-#include <string_view>
-
-#include <boost/spirit/include/qi.hpp>
 #include <boost/phoenix.hpp>
 #include <boost/scope_exit.hpp>
+#include <boost/spirit/include/qi.hpp>
+#include <iostream>
+#include <ranges>
+#include <string_view>
 
 #include "NoteHelpers.h"
 
@@ -41,14 +41,13 @@ Data parseData(std::string_view s)
   Data ret;
   const auto y = [&ret](uint16_t v) { ret.year = v; };
   uint_parser<uint8_t, 10, 1, 2> day_parser_;
-  
-  const char* begin = s.begin();
-  const bool success = boost::spirit::qi::parse(begin, s.end(),
-    day_parser_[ref(ret.day) = _1]   >> '.' >>
-    ushort_[ref(ret.month) = _1] >> char_('.') >>
-    ushort_[y]
-  );
-  if (!success || begin != s.end()) 
+
+  auto begin = std::ranges::cdata(s);
+  const bool success =
+      boost::spirit::qi::parse(begin, begin + s.size(),
+                               day_parser_[ref(ret.day) = _1] >> '.' >>
+                                   ushort_[ref(ret.month) = _1] >> char_('.') >> ushort_[y]);
+  if (!success || begin != (std::ranges::cdata(s) + s.size()))
     throw std::runtime_error("parsing failed");
 
   return ret;
@@ -159,18 +158,13 @@ DataTime parseDataTime(std::string_view s)
      u2_[ref(ret.t.minutes) = _1] >>
      -(':' >> u2_[ref(ret.t.seconds) = _1]));
 
+  auto begin = std::ranges::cdata(s);
+  const bool success = boost::spirit::qi::parse(
+      begin, begin + s.size(),
+      ((data_parser >> (char_('T') | char_('-')) >> time_parser) | data_parser | time_parser) >>
+          timezone_parser);
 
-  const char* begin = s.begin();
-  const bool success = boost::spirit::qi::parse(begin, s.end(),
-    (
-      (data_parser >> (char_('T') | char_('-')) >> time_parser)
-      | data_parser
-      | time_parser
-    )
-    >> timezone_parser
-  );
-
-  if (!success || begin != s.end()) 
+  if (!success || begin != (std::ranges::cdata(s) + s.size()))
     throw std::runtime_error("DataTime parsing failed");
   return ret;
 }

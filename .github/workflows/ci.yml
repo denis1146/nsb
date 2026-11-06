@@ -1,0 +1,46 @@
+name: CI Build and Test
+
+on:
+  push:
+    branches: &ci-branches
+      - master
+      - ci
+  pull_request:
+    branches: *ci-branches
+
+jobs:
+  build:
+    name: Build & Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Install dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'  
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install build-essential libtbb-dev
+
+      - name: Build external libraries (${{ matrix.os  }})
+        run: |
+          cd ./ext_libs/prepare
+          bash -c ./build_libs.sh
+
+      - name: Configure CMake
+        run: cmake -B ./build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Project
+        run: cmake --build ./build --config Release
+
+      - name: Run Tests
+        working-directory: ./build
+        run: ctest -C Release --output-on-failure
