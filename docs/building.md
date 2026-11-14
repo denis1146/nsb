@@ -5,37 +5,24 @@
 * Install **Git** from https://git-scm.com/downloads
 * Install **CMake 4.0.1** or later from https://cmake.org/download
 * If you are using **Linux**, you need to run these commands:
-  ```
+  ```bash
   sudo apt -y install build-essential
   sudo apt -y install libtbb-dev
   ```
 
 ### Clone source code
 
-  ```
-  git clone https://github.com/denis1146/nsb.git
-  git submodule update --init --recursive
-  ```
+  * Clone and update submodules
+    ```bash
+    git clone https://github.com/denis1146/nsb.git
+    git submodule update --init --recursive
+    ```
 
 ### Build external libraries
 
-* Go to the *nsb/ext_libs/prepare* directory
-
-  ```
-  cd ./nsb/ext_libs/prepare
-  ```
-
 * Run the script to download and build external libraries.
-  * For Linux:
-
-    ```
-    ./build_libs.sh linux
-    ```
-
-  * For Windows:
-
-    ```
-    ./build_libs.sh windows
+    ```bash
+    bash -c ./ext_libs/prepare/build_libs.sh
     ```
 
 ### Build the project

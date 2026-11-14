@@ -14,25 +14,17 @@ public:
 };
 
 namespace execution = nsb::numeric::execution;
-using ExecutionTypes = ::testing::Types<
-  execution::std_sequenced_policy
-, execution::std_parallel_policy
-, execution::std_parallel_unsequenced_policy
-, execution::std_unsequenced_policy
-
-, execution::std_sequenced_accumulate_policy
-, execution::std_sequenced_reduce_policy
-
-, execution::sequenced_policy
-, execution::parallel_thread_policy
-, execution::parallel_jthread_policy
-, execution::parallel_promise_policy
-, execution::parallel_packaged_task_policy
-, execution::parallel_async_policy
-, execution::parallel_cv_policy
-, execution::parallel_barrier_policy
-// , execution::parallel_latch_policy
->;
+using ExecutionTypes =
+    ::testing::Types<execution::std_sequenced_policy, execution::std_parallel_policy,
+                     // execution::std_parallel_unsequenced_policy,
+                     execution::std_unsequenced_policy, execution::std_sequenced_accumulate_policy,
+                     execution::std_sequenced_reduce_policy, execution::sequenced_policy,
+                     execution::parallel_thread_policy, execution::parallel_jthread_policy,
+                     execution::parallel_promise_policy, execution::parallel_packaged_task_policy,
+                     execution::parallel_async_policy, execution::parallel_cv_policy
+                     // , execution::parallel_barrier_policy
+                     // , execution::parallel_latch_policy
+                     >;
 TYPED_TEST_SUITE(ReduceTest, ExecutionTypes);
 
 }

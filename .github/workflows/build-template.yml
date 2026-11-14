@@ -1,0 +1,53 @@
+name: CI Build and Test [Template]
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: 'Os name for the workflow run'
+        type: string
+        required: false
+        default: 'linux'
+      prebuild:
+        description: 'Prebuild script for the workflow run'
+        type: string
+        required: false
+
+jobs:
+  build:
+    name: Build & Test (${{ inputs.os }})
+    runs-on: >-
+      ${{
+        inputs.os == 'linux' && 'ubuntu-latest' ||
+        inputs.os == 'windows' && 'windows-latest' ||
+        inputs.os
+      }}
+    timeout-minutes: 25
+
+    steps:
+      - name: 'Runner Info'
+        run: echo '${{ runner.name }} [${{ runner.os }} ${{ runner.arch }}]'
+
+      - name: Clone and update submodules
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Run prebuild script
+        if: inputs.prebuild
+        run: ${{ inputs.prebuild }}
+
+      - name: Use the cache-ext-libs action
+        uses: ./.github/actions/cache-ext-libs
+        with:
+          caching: false
+
+      - name: Configure CMake
+        run: cmake -B ./build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Project
+        run: cmake --build ./build --config Release
+
+      - name: Run Tests
+        working-directory: ./build
+        run: ctest -C Release --output-on-failure

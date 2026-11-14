@@ -1,0 +1,37 @@
+name: Linux CI Build and Test
+run-name: '${{ github.workflow }} [${{ github.event_name}}]'
+
+on:
+  push:
+    branches: &build-branches
+      - "**"
+    paths: &build-paths
+      - "**.cpp"
+      - "**.h"
+      - "**.hpp"
+      - "**.c"
+      - "**.cc"
+      - "**.cxx"
+      - "**.hxx"
+      - "**/CMakeLists.txt"
+      - "ext_libs/**"
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review, converted_to_draft]
+    branches: *build-branches
+    paths: *build-paths
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: Linux
+    if: ${{ !github.event.pull_request.draft }}
+
+    uses: ./.github/workflows/build-template.yml
+    with:
+      prebuild: |
+        sudo apt-get update
+        sudo apt-get -y install build-essential libtbb-dev
