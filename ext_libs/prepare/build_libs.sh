@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-windows="windows"
-linux="linux"
-
-if [ $# -ne 1 ] || [ $1 != $linux ] && [ $1 != $windows ];
-then
-  echo "Error: Please pass the operating system name. Use <$linux> or <$windows> as a parameter." >&2
-  echo "usage: $0 $linux" >&2
-  echo "or" >&2
-  echo "usage: $0 $windows" >&2
-
-  exit 1
-fi
-
-basePath=$(pwd)
+basePath="$(cd "$(dirname "${0}")" && pwd)"
 targetLibs="${basePath}/.."
 tmpPath="${basePath}/tmp"
+linux="linux"
 
-if [ $1 == $linux ];
+raw_os=$(uname -s)
+os=$(echo "$raw_os" | tr '[:upper:]' '[:lower:]')
+case "$raw_os" in
+  Linux*) os=$linux ;;
+  MINGW*|MSYS*|CYGWIN*) os="windows" ;;
+  *)
+    echo "Error: Operating system '$raw_os' is not supported!" >&2
+    exit 1
+    ;;
+esac
+
+if [ $os == $linux ];
 then
-  threads=$(nproc 2>/dev/null \
+  threads=$(nproc 2> /dev/null \
             || echo 16 \
   )
   echo "CPU(s): ${threads}"
@@ -41,7 +41,7 @@ function gitClone {
   local repo=$1
   local branch=$2
   local targetPath="${3}"
-  local force=$4
+  local force="${4:-0}"
   local currentPath=$(pwd)
 
   if [ $force -eq "1" ]
@@ -74,7 +74,7 @@ function buildProject {
 
   local projectPath="${1}"
   local buildCatalog="${2}"
-  local force=$3
+  local force="${3:-0}"
   local buildPath="${projectPath}/${buildCatalog}"
   local currentPath=$(pwd)
 
@@ -111,7 +111,7 @@ function installProject {
 
   local projectBuildPath="${1}"
   local installPath="${2}"
-  local force=$3
+  local force="${3:-0}"
 
   if [ $force -eq "1" ]
   then 
@@ -134,13 +134,23 @@ function installProject {
 # GTest
 gtest_1_17_0="gtest_1_17_0"
 gtestPath="${tmpPath}/${gtest_1_17_0}"
-gitClone "https://github.com/google/googletest.git" "v1.17.0" "${gtestPath}"
-buildProject "${gtestPath}" "_build"
-installProject "${gtestPath}/_build" "${targetLibs}/${gtest_1_17_0}"
+if test -d "${targetLibs}/${gtest_1_17_0}";
+then 
+  echo "Found a catalog with ${targetLibs}/${gtest_1_17_0}"
+else
+  gitClone "https://github.com/google/googletest.git" "v1.17.0" "${gtestPath}"
+  buildProject "${gtestPath}" "_build"
+  installProject "${gtestPath}/_build" "${targetLibs}/${gtest_1_17_0}"
+fi
 
 # Boost
 boost_1_88_0="boost_1_88_0"
 boostPath="${tmpPath}/${boost_1_88_0}"
-gitClone "https://github.com/boostorg/boost.git" "boost-1.88.0" "${boostPath}"
-buildProject "${boostPath}" "_build"
-installProject "${boostPath}/_build" "${targetLibs}/${boost_1_88_0}"
+if test -d "${targetLibs}/${boost_1_88_0}";
+then 
+  echo "Found a catalog with ${targetLibs}/${boost_1_88_0}"
+else
+  gitClone "https://github.com/boostorg/boost.git" "boost-1.88.0" "${boostPath}"
+  buildProject "${boostPath}" "_build"
+  installProject "${boostPath}/_build" "${targetLibs}/${boost_1_88_0}"
+fi

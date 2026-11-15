@@ -1,0 +1,28 @@
+name: Building and caching an external library
+description: This action builds and caches an external library for use in a GitHub Actions workflow.
+inputs:
+  caching:
+    description: 'Whether to cache the external library or not'
+    required: false
+    default: 'true'
+
+runs:
+  using: "composite"
+  steps:
+    - name: External library cache
+      if: ${{ inputs.caching == 'true' }}
+      id: cache-ext-libs
+      uses: actions/cache@v6
+      with:
+        path: |
+          ./ext_libs/gtest*/**
+          ./ext_libs/boost*/**
+        key: ${{ runner.os }}-ext_libs-${{ hashFiles('ext_libs/prepare/build_libs.sh') }}
+        restore-keys: |
+          ${{ runner.os }}-ext_libs-
+          ${{ runner.os }}-
+    
+    - name: 'Build external libraries'
+      if: ${{ steps.cache-ext-libs.outputs.cache-hit != 'true' }}
+      run: bash -c ./ext_libs/prepare/build_libs.sh
+      shell: bash
