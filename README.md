@@ -2,6 +2,9 @@
 
 **Not a simple sandbox** (**nsb**) is a sandbox with the Boost and GoogleTest libraries included, as well as its own cache implementations and some other functions.  
 
+[![Windows](https://github.com/denis1146/nsb/actions/workflows/Windows.yml/badge.svg)](https://github.com/denis1146/nsb/actions/workflows/Windows.yml)
+[![Linux](https://github.com/denis1146/nsb/actions/workflows/Linux.yml/badge.svg)](https://github.com/denis1146/nsb/actions/workflows/Linux.yml)
+
 ## Supported systems
 
 * Linux

@@ -1,7 +1,6 @@
 #include "TaskManagerAsio.hpp"
 
 #include <boost/asio.hpp>
-#include <boost/scope_exit.hpp>
 #include <list>
 #include <optional>
 #include <stdexcept>
@@ -185,19 +184,13 @@ public:
       std::lock_guard l{ m_threadPoolMutex };
       boost::asio::post(m_threadPool.executor(),
                         [t = tsk->weak_from_this(), tm = weak_from_this()]() {
-                          auto task = t.lock();
+                          if (auto task = t.lock()) {
+                            if (!task->stopped())
+                              task->call();
 
-                          BOOST_SCOPE_EXIT(&tm, task)
-                          {
                             if (auto taskManager = tm.lock())
                               taskManager->removeTask(task);
                           }
-                          BOOST_SCOPE_EXIT_END;
-
-                          if (!task || task->stopped())
-                            return;
-
-                          task->call();
                         });
     } catch (const ThreadPoolAsio::ExecutorError& e) {
       tsk.reset();
